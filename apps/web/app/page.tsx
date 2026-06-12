@@ -1,8 +1,45 @@
 "use client";
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+const RUNTIME_LOGS = [
+    "> Mapping intent to node: frontend.session",
+    "> Resolving ownership constraints...",
+    "> Traversing allowed edges: [owns, depends_on]",
+    "> Agent attempting to access: server.auth.secrets",
+    "> Boundary violation detected.",
+    "> Traversal terminated."
+];
 
 export default function LandingPage() {
+    const [requestInput, setRequestInput] = useState('Refactor session persistence to optimize speed.');
+    const [logs, setLogs] = useState<string[]>([]);
+    const [status, setStatus] = useState<'IDLE' | 'RUNNING' | 'BLOCKED'>('IDLE');
+
+    const executeFirewall = () => {
+        setLogs([]);
+        setStatus('RUNNING');
+        let currentIndex = 0;
+        
+        const interval = setInterval(() => {
+            setLogs(prev => {
+                const newLogs = [...prev, RUNTIME_LOGS[currentIndex]];
+                currentIndex++;
+                
+                if (currentIndex >= RUNTIME_LOGS.length) {
+                    clearInterval(interval);
+                    setTimeout(() => setStatus('BLOCKED'), 200);
+                }
+                return newLogs;
+            });
+        }, 400); // 400ms staggered delay
+    };
+
+    // Auto-run on mount for dramatic effect
+    useEffect(() => {
+        executeFirewall();
+    }, []);
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -49,20 +86,97 @@ export default function LandingPage() {
             SRP prevents that.
           </h2>
 
-          {/* GIF PLACEHOLDER */}
+          {/* EMBEDDED FIREWALL DEMO */}
           <div style={{ 
             width: '100%', 
-            height: '300px', 
-            background: '#111', 
+            background: '#000', 
             border: '1px solid #222', 
             borderRadius: '4px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#444',
+            padding: '1.5rem',
             marginBottom: '2rem'
           }}>
-            [REAL DEMO GIF: Agent blocked from accessing server.auth.secrets]
+              {/* THE AGENT REQUEST */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                      <div style={{ fontSize: '0.75rem', color: '#888', textTransform: 'uppercase' }}>Agent Request</div>
+                      <button 
+                          onClick={status === 'RUNNING' ? undefined : executeFirewall}
+                          style={{ 
+                              background: 'transparent', 
+                              border: '1px solid #333', 
+                              color: '#888', 
+                              padding: '0.2rem 0.5rem', 
+                              fontSize: '0.7rem',
+                              cursor: status === 'RUNNING' ? 'not-allowed' : 'pointer'
+                          }}>
+                          {status === 'RUNNING' ? 'EXECUTING...' : 'RE-RUN'}
+                      </button>
+                  </div>
+                  <div style={{
+                      width: '100%',
+                      background: '#111',
+                      border: '1px solid #333',
+                      color: '#fff',
+                      padding: '0.75rem',
+                      fontFamily: '"Fira Code", monospace',
+                      fontSize: '0.85rem',
+                      borderRadius: '2px'
+                  }}>
+                      {requestInput}
+                  </div>
+              </div>
+
+              {/* THE RUNTIME EXECUTION */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Runtime Traversal</div>
+                  <div style={{
+                      background: '#0a0a0a',
+                      border: '1px solid #222',
+                      padding: '0.75rem',
+                      minHeight: '150px',
+                      fontFamily: '"Fira Code", monospace',
+                      fontSize: '0.85rem',
+                      color: '#a1a1aa',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.5rem'
+                  }}>
+                      {logs.map((log, i) => (
+                          <div key={i} style={{ 
+                              color: log.includes('violation') || log.includes('terminated') ? '#ff4444' : 
+                                     log.includes('server.auth.secrets') ? '#fff' : '#a1a1aa' 
+                          }}>
+                              {log}
+                          </div>
+                      ))}
+                      {status === 'RUNNING' && (
+                          <div style={{ color: '#444', animation: 'blink 1s step-end infinite' }}>_</div>
+                      )}
+                  </div>
+              </div>
+
+              {/* THE BINARY RESULT */}
+              <div style={{ opacity: status === 'BLOCKED' ? 1 : 0.2, transition: 'opacity 0.2s ease-in' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#888', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Governance Status</div>
+                  <div style={{
+                      background: status === 'BLOCKED' ? '#220000' : '#111',
+                      border: `1px solid ${status === 'BLOCKED' ? '#ff0000' : '#333'}`,
+                      padding: '1rem',
+                      textAlign: 'center',
+                      color: status === 'BLOCKED' ? '#ff4444' : '#444',
+                      fontWeight: 600,
+                      letterSpacing: '0.05em',
+                      borderRadius: '2px',
+                      fontSize: '0.9rem'
+                  }}>
+                      {status === 'BLOCKED' ? 'BLOCKED: ZERO-EDGE REJECTION' : 'AWAITING TRAVERSAL'}
+                  </div>
+                  {status === 'BLOCKED' && (
+                      <div style={{ textAlign: 'center', marginTop: '0.5rem', color: '#888', fontSize: '0.8rem' }}>
+                          Traversal denied by runtime scope policy.
+                      </div>
+                  )}
+              </div>
           </div>
 
           {/* 3 BULLETS */}
@@ -108,11 +222,17 @@ export default function LandingPage() {
               fontSize: '0.9rem',
               display: 'inline-block'
             }}>
-              Watch SRP Stop an Agent
+              Open the Context Firewall Console
           </a>
         </section>
 
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+          @keyframes blink {
+              0%, 100% { opacity: 1; }
+              50% { opacity: 0; }
+          }
+      `}} />
     </div>
   );
 }

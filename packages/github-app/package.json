@@ -1,0 +1,16 @@
+{
+  "name": "@semantic-os/github-app",
+  "version": "1.0.0-alpha",
+  "description": "Semantic Governance Enforcement for GitHub PRs",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "dependencies": {
+    "@semantic-os/core": "workspace:*",
+    "@octokit/rest": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

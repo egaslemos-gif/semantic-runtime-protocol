@@ -1,0 +1,20 @@
+{
+  "name": "@semantic-os/cli",
+  "version": "1.0.0-alpha",
+  "description": "Semantic Governance CLI",
+  "main": "dist/index.js",
+  "bin": {
+    "srp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc -w"
+  },
+  "dependencies": {
+    "commander": "^11.1.0",
+    "@semantic-os/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

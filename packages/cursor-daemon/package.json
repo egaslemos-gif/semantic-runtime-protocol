@@ -1,0 +1,16 @@
+{
+  "name": "@semantic-os/cursor-daemon",
+  "version": "1.0.0-alpha",
+  "description": "Semantic Governance Coprocessor for Cursor IDE",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "tsc && node dist/index.js"
+  },
+  "dependencies": {
+    "@semantic-os/core": "workspace:*",
+    "chokidar": "^3.5.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

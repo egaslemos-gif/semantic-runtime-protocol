@@ -16,7 +16,19 @@ export default function LandingPage() {
       alignItems: 'center'
     }}>
       <div style={{ maxWidth: '800px', width: '100%' }}>
-        
+        {/* NAVIGATION */}
+        <nav style={{ 
+          display: 'flex', 
+          gap: '1.5rem', 
+          marginBottom: '4rem', 
+          fontSize: '0.9rem', 
+          color: '#888' 
+        }}>
+          <a href="https://github.com/egaslemos-gif/semantic-runtime-protocol" style={{ color: '#ededed', textDecoration: 'none' }}>GitHub</a>
+          <a href="https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs" style={{ color: '#ededed', textDecoration: 'none' }}>Docs</a>
+          <a href="https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/examples/nextjs-auth-demo" style={{ color: '#ededed', textDecoration: 'none' }}>Examples</a>
+        </nav>
+
         {/* HERO SECTION */}
         <header style={{ marginBottom: '4rem' }}>
           <h1 style={{ 
@@ -84,8 +96,7 @@ export default function LandingPage() {
         <section style={{ marginBottom: '4rem', paddingTop: '2rem', borderTop: '1px solid #222' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '500', marginBottom: '1rem' }}>Deterministic Context Filtering</h3>
           <p style={{ color: '#a1a1aa', fontSize: '1rem', margin: '0 0 1.5rem 0' }}>
-            RAG retrieves data probabilistically. The Semantic Runtime Protocol (SRP) intercepts the agent&apos;s context window 
-            and physically drops traversal paths that violate your architecture. It is a strict firewall for agent context.
+            Traditional AI systems retrieve context broadly. SRP blocks architectural violations before the agent receives context.
           </p>
           <a href="/playground" style={{ 
               background: '#ededed', 
@@ -97,7 +108,7 @@ export default function LandingPage() {
               fontSize: '0.9rem',
               display: 'inline-block'
             }}>
-              Test the Context Firewall
+              Watch SRP Stop an Agent
           </a>
         </section>
 

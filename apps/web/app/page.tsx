@@ -84,7 +84,7 @@ export default function LandingPage() {
         <section style={{ marginBottom: '4rem', paddingTop: '2rem', borderTop: '1px solid #222' }}>
           <h3 style={{ fontSize: '1.2rem', fontWeight: '500', marginBottom: '1rem' }}>Deterministic Context Filtering</h3>
           <p style={{ color: '#a1a1aa', fontSize: '1rem', margin: '0 0 1.5rem 0' }}>
-            RAG retrieves data probabilistically. The Semantic Runtime Protocol (SRP) intercepts the agent's context window 
+            RAG retrieves data probabilistically. The Semantic Runtime Protocol (SRP) intercepts the agent&apos;s context window 
             and physically drops traversal paths that violate your architecture. It is a strict firewall for agent context.
           </p>
           <a href="/playground" style={{ 

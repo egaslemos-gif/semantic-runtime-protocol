@@ -26,11 +26,12 @@ export async function POST(request: Request) {
             ...result
         });
 
-    } catch (error: any) {
+    } catch (error: unknown) {
         // Enforce Fail Fast on Queries
+        const err = error as Error;
         return NextResponse.json(
-            { error: error.message || "Unknown Runtime Error" },
-            { status: error.message.includes('FATAL') ? 400 : 500 }
+            { error: err?.message || "Unknown Runtime Error" },
+            { status: err?.message?.includes('FATAL') ? 400 : 500 }
         );
     }
 }

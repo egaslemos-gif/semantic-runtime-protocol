@@ -1,26 +1,26 @@
 /** SRP Design Tokens — TypeScript constants for programmatic use */
 
 export const colors = {
-  bg: '#050505',
-  bgSurface: '#0a0a0a',
-  bgRaised: '#111111',
-  bgElevated: '#1a1a1a',
+  bg: '#0e0e10',
+  bgSurface: '#161616',
+  bgRaised: '#1b1b1d', // Used for hover states
+  bgElevated: '#1d1d1f',
 
-  fg: '#f5f5f5',
-  fgMuted: '#a1a1aa',
+  fg: '#f3f4f6', // Softer white to reduce eye fatigue
+  fgMuted: '#9ca3af',
   fgDim: '#6b7280',
-  fgGhost: '#3f3f46',
+  fgGhost: '#4b5563',
 
-  border: '#1a1a1a',
-  borderSubtle: '#111111',
-  borderStrong: '#2a2a2a',
+  border: '#262626',
+  borderSubtle: '#1f1f1f',
+  borderStrong: '#323232', // Used for hover states
 
-  allowed: '#00ff41',
-  allowedDim: '#00cc33',
-  allowedBg: '#001a0a',
-  blocked: '#ff3b30',
-  blockedDim: '#cc2f26',
-  blockedBg: '#1a0505',
+  allowed: '#10b981', // Operational green (not neon)
+  allowedDim: '#059669',
+  allowedBg: '#064e3b',
+  blocked: '#ef4444', // Operational red (not bright)
+  blockedDim: '#dc2626',
+  blockedBg: '#450a0a',
 
   structure: '#6b7280',
   accent: '#e5e5e5',
@@ -37,7 +37,8 @@ export const spacing = {
 } as const;
 
 export const layout = {
-  contentWidth: '720px',
+  contentWidth: '760px',
+  homepageWidth: '880px',
   sidebarWidth: '240px',
   navHeight: '56px',
 } as const;

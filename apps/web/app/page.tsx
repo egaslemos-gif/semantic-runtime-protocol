@@ -7,19 +7,20 @@ import FirewallConsole from '../components/FirewallConsole';
 export default function HomePage() {
   const ctaStyle = {
     display: 'inline-block',
-    padding: '0.6rem 1rem',
+    padding: '0.75rem 1.25rem',
     border: '1px solid var(--border)',
-    borderRadius: '4px',
+    borderRadius: '6px',
     color: 'var(--fg)',
     textDecoration: 'none',
-    fontSize: '0.9rem',
+    fontSize: '0.95rem',
     background: 'var(--bg-surface)',
+    transition: 'background-color 120ms linear, border-color 120ms linear',
   };
 
   return (
-    <div style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ padding: '6rem 2rem', maxWidth: '880px', margin: '0 auto' }}>
       {/* HERO */}
-      <header style={{ marginBottom: '4rem' }}>
+      <header style={{ marginBottom: '6rem' }}>
         <h1 style={{
           fontSize: '2.75rem',
           fontWeight: 600,
@@ -102,7 +103,7 @@ export default function HomePage() {
           Understand SRP
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem' }}>
           {[
             { href: '/docs/runtime-boundaries', title: 'Runtime Boundaries', desc: 'How SRP blocks invalid traversal paths before context assembly.' },
             { href: '/failure-modes', title: 'Failure Modes', desc: 'Real-world examples of AI agents corrupting architecture under complexity pressure.' },
@@ -130,7 +131,7 @@ export default function HomePage() {
           Why Existing Systems Fail
         </h2>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[
             { href: '/comparisons/rag-vs-srp', title: 'RAG vs SRP', desc: 'Retrieval systems retrieve context. They do not enforce architecture.' },
             { href: '/comparisons/guardrails-vs-srp', title: 'Guardrails vs SRP', desc: 'Guardrails validate outputs. SRP restricts traversal itself.' },

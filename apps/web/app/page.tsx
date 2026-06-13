@@ -5,6 +5,17 @@ import Link from 'next/link';
 import FirewallConsole from '../components/FirewallConsole';
 
 export default function HomePage() {
+  const ctaStyle = {
+    display: 'inline-block',
+    padding: '0.6rem 1rem',
+    border: '1px solid var(--border)',
+    borderRadius: '4px',
+    color: 'var(--fg)',
+    textDecoration: 'none',
+    fontSize: '0.9rem',
+    background: 'var(--bg-surface)',
+  };
+
   return (
     <div style={{ padding: '4rem 2rem', maxWidth: '800px', margin: '0 auto' }}>
       {/* HERO */}
@@ -35,7 +46,7 @@ export default function HomePage() {
         <ul style={{
           listStyleType: 'none',
           padding: 0,
-          margin: '1.5rem 0',
+          margin: '2rem 0',
           display: 'flex',
           flexDirection: 'column',
           gap: '0.35rem',
@@ -55,13 +66,23 @@ export default function HomePage() {
         </ul>
 
         {/* CLI DEMO */}
+        <h2 style={{
+          fontSize: '0.8rem',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          color: 'var(--fg-dim)',
+          marginBottom: '1rem',
+          marginTop: '2rem',
+        }}>
+          Deterministic Context Filtering
+        </h2>
         <div style={{
           fontFamily: 'var(--font-mono)',
           background: 'var(--bg-surface)',
           padding: '1.25rem',
           borderRadius: '4px',
           border: '1px solid var(--border)',
-          marginTop: '1.5rem',
         }}>
           <div style={{ color: 'var(--fg)', marginBottom: '0.75rem' }}>$ srp protect auth-module</div>
           <div style={{ color: 'var(--blocked)' }}>✓ Agent blocked from traversing server.auth.secrets</div>
@@ -78,16 +99,42 @@ export default function HomePage() {
           color: 'var(--fg-dim)',
           marginBottom: '1rem',
         }}>
-          Explore
+          Understand SRP
+        </h2>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0', marginBottom: '2rem' }}>
+          {[
+            { href: '/docs/runtime-boundaries', title: 'Runtime Boundaries', desc: 'How SRP blocks invalid traversal paths before context assembly.' },
+            { href: '/failure-modes', title: 'Failure Modes', desc: 'Real-world examples of AI agents corrupting architecture under complexity pressure.' },
+            { href: '/examples/nextjs-auth-boundary', title: 'Next.js Auth Boundary', desc: 'Concrete example of SRP blocking frontend traversal into server.auth.secrets.' },
+          ].map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="section-card"
+            >
+              <div className="section-card-title">{item.title}</div>
+              <div className="section-card-description">{item.desc}</div>
+            </Link>
+          ))}
+        </div>
+
+        <h2 style={{
+          fontSize: '0.8rem',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          color: 'var(--fg-dim)',
+          marginBottom: '1rem',
+        }}>
+          Why Existing Systems Fail
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
           {[
-            { href: '/docs', title: 'Docs', desc: 'Runtime boundaries, traversal engine, context firewall, constraints.' },
-            { href: '/failure-modes', title: 'Failure Modes', desc: 'Prompt drift, scope leakage, context explosion, architectural drift.' },
-            { href: '/comparisons', title: 'Comparisons', desc: 'RAG vs SRP, Guardrails vs SRP, MCP vs SRP, Harnesses vs SRP.' },
-            { href: '/foundations', title: 'Foundations', desc: 'Context, agents, retrieval, runtime boundaries.' },
-            { href: '/playground', title: 'Playground', desc: 'Interactive runtime firewall simulation.' },
+            { href: '/comparisons/rag-vs-srp', title: 'RAG vs SRP', desc: 'Retrieval systems retrieve context. They do not enforce architecture.' },
+            { href: '/comparisons/guardrails-vs-srp', title: 'Guardrails vs SRP', desc: 'Guardrails validate outputs. SRP restricts traversal itself.' },
+            { href: '/comparisons/mcp-vs-srp', title: 'MCP vs SRP', desc: 'Model Context Protocol connects tools. SRP governs what the agent can reach.' },
           ].map((item) => (
             <Link
               key={item.href}
@@ -101,22 +148,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer style={{
+      {/* FOOTER CTAs */}
+      <section style={{
         borderTop: '1px solid var(--border)',
         marginTop: '3rem',
-        paddingTop: '1.5rem',
-        display: 'flex',
-        gap: '1.5rem',
-        fontSize: '0.85rem',
-        color: 'var(--fg-dim)',
+        paddingTop: '2rem',
       }}>
-        <a href="https://github.com/egaslemos-gif/semantic-runtime-protocol" style={{ color: 'var(--fg-dim)' }}>
-          GitHub
-        </a>
-        <Link href="/docs" style={{ color: 'var(--fg-dim)' }}>Docs</Link>
-        <Link href="/playground" style={{ color: 'var(--fg-dim)' }}>Playground</Link>
-      </footer>
+        <h2 style={{
+          fontSize: '1rem',
+          fontWeight: 600,
+          marginBottom: '1.5rem',
+          color: 'var(--fg)',
+        }}>
+          Explore the Runtime Boundary System
+        </h2>
+        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+          <Link href="/docs" style={ctaStyle}>Read the Docs</Link>
+          <Link href="/failure-modes" style={ctaStyle}>View Failure Modes</Link>
+          <Link href="/context-firewall" style={ctaStyle}>Open Context Firewall</Link>
+          <a href="https://github.com/egaslemos-gif/semantic-runtime-protocol" style={ctaStyle} target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        </div>
+      </section>
     </div>
   );
 }

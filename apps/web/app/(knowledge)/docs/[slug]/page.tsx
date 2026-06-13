@@ -1,0 +1,53 @@
+import React from 'react';
+import { notFound } from 'next/navigation';
+import { getContentBySlug, getAllSlugs } from '@/lib/content';
+import { getSectionByKey, getGlobalPrevNext } from '@/lib/navigation';
+import { PageHeader, PrevNextLinks, MDXRenderer } from '@/components/docs';
+import Prose from '@/components/content/Prose';
+import ReferenceBlock from '@/components/content/ReferenceBlock';
+
+export async function generateStaticParams() {
+  const slugs = getAllSlugs('docs');
+  return slugs.map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = getContentBySlug('docs', slug);
+  if (!page) return { title: 'Not Found' };
+  return {
+    title: `${page.frontmatter.title} — SRP Docs`,
+    description: page.frontmatter.description,
+  };
+}
+
+export default async function DocsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const page = getContentBySlug('docs', slug);
+  if (!page) notFound();
+
+  const section = getSectionByKey('docs')!;
+  const { prev, next } = getGlobalPrevNext('docs', slug);
+
+  return (
+    <div style={{ padding: '2rem 2.5rem' }}>
+      <div className="page-content">
+        <PageHeader
+          title={page.frontmatter.title}
+          description={page.frontmatter.description}
+          section={section.title}
+          sectionHref={section.href}
+        />
+        <Prose>
+          <MDXRenderer source={page.content} />
+        </Prose>
+        <ReferenceBlock
+          references={page.frontmatter.references}
+          furtherReading={page.frontmatter.furtherReading}
+          relatedSystems={page.frontmatter.relatedSystems}
+        />
+        <PrevNextLinks prev={prev} next={next} />
+      </div>
+    </div>
+  );
+}

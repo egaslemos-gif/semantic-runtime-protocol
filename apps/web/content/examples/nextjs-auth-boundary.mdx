@@ -1,0 +1,51 @@
+---
+title: Next.js Auth Boundary Failure
+description: Um exemplo de como o SRP previne que agentes ultrapassem o boundary do frontend para acessar server.auth.secrets em runtime.
+order: 1
+---
+
+# Next.js Auth Boundary Failure
+
+Agentes LLM em tarefas de exploração arquitetural frequentemente tentam acessar primitivas de servidor quando instruídos a debugar falhas de autenticação. 
+
+Em aplicações Next.js, as fronteiras entre o contexto de cliente (Browser) e servidor (Node.js/Edge) podem ser fluídas para desenvolvedores, mas devem ser **impenetráveis** para agentes autônomos por motivos de segurança operacional.
+
+## O Vetor de Falha
+
+Quando um agente está resolvendo um erro em `app/login/page.tsx`, ele pode tentar realizar um traversal especulativo para encontrar as chaves de criptografia usadas na assinatura do token. 
+
+O agente tentará ler:
+
+```typescript
+// O agente descobre este arquivo via traversal de dependências
+import { sessionSecret } from "@/server/auth/secrets";
+```
+
+Sem um limite arquitetural forte, o agente — operando no contexto de correção do *frontend* — acaba inspecionando ou até modificando arquivos críticos de segurança do servidor.
+
+## A Solução SRP
+
+Com o Semantic Runtime Protocol, definimos boundaries rígidos no manifesto.
+
+Quando o agente está operando sob o escopo `frontend:auth`, a tentativa de ler qualquer recurso no pacote `@/server/auth` é deterministicamente interceptada pelo **Context Firewall**.
+
+```yaml
+# srp-manifest.yaml
+boundaries:
+  frontend:auth:
+    allows:
+      - apps/web/app/login/**
+      - apps/web/components/auth/**
+    denies:
+      - apps/web/server/auth/secrets.ts
+```
+
+### O Resultado em Tempo de Execução
+
+Se o agente tentar executar `readFile('apps/web/server/auth/secrets.ts')`:
+
+1. O **Traversal Engine** detecta a requisição fora do boundary atual.
+2. A requisição é negada deterministicamente.
+3. O agente recebe uma resposta padronizada indicando a violação de boundary (Scope Leakage impedido).
+
+**Consequência**: Falha de contenção demonstrada. O agente é forçado a resolver o problema no cliente sem envenenar seu contexto (ou expor) chaves do servidor.

@@ -25,7 +25,7 @@ export default function ContextFirewallPlayground() {
                         color: 'var(--fg-dim)',
                         marginBottom: '0.5rem',
                     }}>
-                        Runtime Firewall
+                        SRP Context Firewall
                     </h1>
                     <p style={{
                         fontSize: '0.875rem',

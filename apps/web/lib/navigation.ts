@@ -63,6 +63,14 @@ export const SECTIONS: NavSection[] = [
       { slug: 'runtime-boundaries', title: 'Runtime Boundaries', description: 'O conceito fundamental que conecta o ecossistema ao SRP.' },
     ],
   },
+  {
+    key: 'examples',
+    title: 'Examples',
+    href: '/examples',
+    pages: [
+      { slug: 'nextjs-auth-boundary', title: 'Next.js Auth Boundary Failure', description: 'Como o SRP previne que agentes ultrapassem o boundary do frontend para acessar server.auth.secrets em runtime.' },
+    ],
+  },
 ];
 
 export function getSectionByKey(key: string): NavSection | undefined {
@@ -72,4 +80,56 @@ export function getSectionByKey(key: string): NavSection | undefined {
 export function getPageInSection(sectionKey: string, slug: string): NavPage | undefined {
   const section = getSectionByKey(sectionKey);
   return section?.pages.find(p => p.slug === slug);
+}
+
+export const COGNITIVE_SEQUENCE = [
+  "foundations/context",
+  "foundations/agents",
+  "foundations/retrieval",
+  "foundations/runtime-boundaries",
+
+  "comparisons/rag-vs-srp",
+  "comparisons/guardrails-vs-srp",
+  "comparisons/mcp-vs-srp",
+  "comparisons/harnesses-vs-srp",
+
+  "docs/runtime-boundaries",
+  "docs/traversal-engine",
+  "docs/context-firewall",
+  "docs/constraints",
+  "docs/runtime-safety",
+  "docs/cli-usage",
+  "docs/manifests",
+  "docs/srql",
+  "docs/case-study-university",
+
+  "failure-modes/prompt-drift",
+  "failure-modes/scope-leakage",
+  "failure-modes/context-explosion",
+  "failure-modes/architectural-drift",
+
+  "examples/nextjs-auth-boundary",
+];
+
+export function getGlobalPrevNext(sectionKey: string, slug: string) {
+  const fullPath = `${sectionKey}/${slug}`;
+  const index = COGNITIVE_SEQUENCE.indexOf(fullPath);
+  
+  if (index === -1) return { prev: undefined, next: undefined };
+  
+  const prevPath = index > 0 ? COGNITIVE_SEQUENCE[index - 1] : undefined;
+  const nextPath = index < COGNITIVE_SEQUENCE.length - 1 ? COGNITIVE_SEQUENCE[index + 1] : undefined;
+
+  const resolvePage = (path?: string) => {
+    if (!path) return undefined;
+    const [secKey, pageSlug] = path.split('/');
+    const page = getPageInSection(secKey, pageSlug);
+    if (!page) return undefined;
+    return { title: page.title, href: `/${secKey}/${pageSlug}` };
+  };
+
+  return {
+    prev: resolvePage(prevPath),
+    next: resolvePage(nextPath),
+  };
 }

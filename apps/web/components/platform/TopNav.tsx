@@ -30,8 +30,8 @@ export default function TopNav() {
               {section.title}
             </Link>
           ))}
-          <Link href="/playground" className={`nav-link ${isActive('/playground') ? 'active' : ''}`}>
-            Playground
+          <Link href="/context-firewall" className={`nav-link ${isActive('/context-firewall') ? 'active' : ''}`}>
+            Context Firewall
           </Link>
           <a
             href="https://github.com/egaslemos-gif/semantic-runtime-protocol"

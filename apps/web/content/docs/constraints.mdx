@@ -1,0 +1,37 @@
+---
+title: "Constraints"
+description: "Definição e aplicação de restrições de runtime."
+order: 4
+references:
+  - title: "SRP Specification"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srp/v1alpha"
+---
+
+## O que são Constraints
+
+Constraints são **regras declarativas** que restringem o comportamento do traversal engine. Definem o que o agente pode e não pode alcançar durante uma sessão de trabalho.
+
+## Tipos de Constraint
+
+| Tipo | Descrição |
+|---|---|
+| **Scope constraint** | Restringe traversal entre scopes |
+| **Depth constraint** | Limita profundidade de BFS |
+| **Edge constraint** | Filtra tipos de edge permitidos |
+| **Budget constraint** | Limita número de nós visitáveis |
+
+## Definição
+
+Constraints são declaradas no manifest ou via API:
+
+```yaml
+constraints:
+  max_depth: 3
+  allowed_edge_types: ["depends_on", "owns"]
+  denied_scopes: ["server.secrets"]
+  budget: 50
+```
+
+## Aplicação
+
+Cada constraint é avaliada pelo firewall durante o traversal. A primeira violação termina a navegação com `DENIED`.

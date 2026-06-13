@@ -24,7 +24,7 @@ Before an agent reads a single line of narrative context, it must be subjected t
 3. **Operational Truth must be enforced.** If a security rule enforces a database schema, the runtime MUST deliver that rule whenever the schema is queried, overriding any probabilistic attempt by the agent to ignore it.
 
 ## The Semantic Runtime Protocol (SRP)
-The Semantic OS is an **Epistemological Hypervisor**. It sits between the raw data of an organization and the autonomous agents that attempt to interact with it.
+The SRP (formerly SRP) is an **boundary enforcement layer**. It sits between the raw data of an organization and the autonomous agents that attempt to interact with it.
 
 It does not generate text. It does not answer questions. It *compiles, prunes, audits, and serves* deterministic context payloads. It ensures that whether Cursor, Claude, or a CI Bot requests context about the "Auth System," they receive a strictly governed, epistemologically consistent subset of the system's operational truth.
 

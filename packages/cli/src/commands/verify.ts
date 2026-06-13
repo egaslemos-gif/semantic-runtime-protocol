@@ -3,7 +3,7 @@ export const verifyCommand = async (canonicalId: string) => {
   
   console.log(`
 [TRAVERSAL]
-Hop 1: system.auth.rules (Budget: 499)
+Hop 1: server.auth.rules (Budget: 499)
 Hop 2: system.db.encryption (Budget: 498)
 
 [CHECKS]

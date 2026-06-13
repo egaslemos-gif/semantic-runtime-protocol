@@ -1,6 +1,6 @@
 # Runtime Benchmark Rules
 
-The Semantic OS is an operational layer, requiring strict performance KPIs to prevent throttling the autonomous agents that rely on it.
+The SRP (formerly SRP) is an operational layer, requiring strict performance KPIs to prevent throttling the autonomous agents that rely on it.
 
 ## Key Performance Indicators (KPIs)
 

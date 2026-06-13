@@ -1,0 +1,58 @@
+---
+title: "Context Firewall"
+description: "Filtragem determinística de contexto antes que o agente receba informação."
+order: 3
+references:
+  - title: "SRP Source — firewall.ts"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/blob/main/apps/web/lib/runtime/firewall.ts"
+relatedSystems:
+  - title: "iptables / nftables — Network firewalls"
+    url: "https://netfilter.org"
+---
+
+## O que é
+
+O Context Firewall é o **mecanismo de decisão** do SRP. Para cada edge traversal, avalia se a navegação é permitida dado o scope da intenção e as regras de boundary definidas.
+
+O nome é intencional. Funciona exactamente como um firewall de rede — mas para **contexto arquitectural**.
+
+## Modelo de decisão
+
+```typescript
+evaluateTraversal(intentScope, fromNode, toNode): FirewallDecision
+// → { status: "ALLOWED" }
+// → { status: "DENIED", reason: "Cross-scope traversal rejected." }
+```
+
+A decisão é **binária**. Não existe "parcialmente permitido", "permitido com aviso", ou "permitido mas logado". ALLOWED ou DENIED.
+
+## Regras de exemplo
+
+```typescript
+// 1. Frontend não acede a server secrets
+if (intentScope === "frontend" && to.scope === "server" && to.id.includes("secrets")) {
+  return { status: "DENIED", reason: "Cross-scope traversal rejected." };
+}
+
+// 2. Server não navega para frontend
+if (from.scope === "server" && to.scope === "frontend") {
+  return { status: "DENIED", reason: "Server cannot traverse into frontend." };
+}
+```
+
+## Propriedades
+
+- **Stateless**: cada decisão é independente — sem contexto acumulado entre avaliações
+- **Determinístico**: mesmas entradas produzem sempre a mesma decisão
+- **Zero-knowledge**: o firewall não sabe o que o agente quer fazer — apenas onde quer ir
+- **Fail-closed**: em caso de ambiguidade, a decisão default é DENIED
+
+## Analogia
+
+| Conceito de rede | Equivalente SRP |
+|---|---|
+| IP source/destination | Scope do intent / Scope do target |
+| Port | Edge type (owns, depends_on, reads) |
+| Firewall rule | Boundary rule |
+| ALLOW/DROP | ALLOWED/DENIED |
+| Packet | Edge traversal attempt |

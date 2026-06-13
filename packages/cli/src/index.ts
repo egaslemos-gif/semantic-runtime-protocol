@@ -10,7 +10,7 @@ const program = new Command();
 
 program
   .name('srp')
-  .description('Semantic OS Governance CLI')
+  .description('SRP Governance CLI')
   .version('1.0.0-alpha');
 
 program

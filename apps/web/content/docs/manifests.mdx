@@ -1,0 +1,33 @@
+---
+title: "Manifests"
+description: "Declaração de limites e permissões via manifests SRP."
+order: 7
+references:
+  - title: "SRP Specification — Manifests"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srp/v1alpha"
+---
+
+## O que é um Manifest
+
+Um manifest SRP é um ficheiro declarativo (`srp.manifest.yaml`) que define as **regras de boundary** para um projecto. É o equivalente a um firewall ruleset — mas para arquitectura de software.
+
+## Estrutura
+
+```yaml
+version: "1alpha"
+project: "my-app"
+scopes:
+  frontend:
+    allowed_targets: ["server.auth", "server.api"]
+    denied_targets: ["server.auth.secrets", "server.database.credentials"]
+  server:
+    allowed_targets: ["server.*"]
+    denied_targets: ["frontend.*"]
+constraints:
+  max_depth: 3
+  allowed_edge_types: ["depends_on", "owns"]
+```
+
+## Validação
+
+O manifest é validado pelo CLI e pelo runtime antes de qualquer traversal. Erros de schema resultam em rejeição total — não em degradação parcial.

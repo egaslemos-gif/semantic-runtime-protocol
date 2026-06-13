@@ -4,7 +4,7 @@
 
 ## 1. Breadth-First Search (BFS) Strictness
 The Context Query Engine traverses the Immutable Graph strictly using BFS.
-Why? Because depth implies distance from intent. An LLM requesting `system.auth` should immediately receive direct dependencies before exploring grandchildren relationships 5 layers deep.
+Why? Because depth implies distance from intent. An LLM requesting `server.auth` should immediately receive direct dependencies before exploring grandchildren relationships 5 layers deep.
 
 ## 2. Computational Budgets
 Every traversal operation requires a `budget`. 

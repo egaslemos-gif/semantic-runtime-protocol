@@ -1,6 +1,6 @@
 # Semantic Entropy Metrics
 
-As the Semantic OS grows, so does its inherent chaos. The `pnpm compile` step must calculate and track Entropy KPIs.
+As the SRP (formerly SRP) grows, so does its inherent chaos. The `pnpm compile` step must calculate and track Entropy KPIs.
 
 ## System Health Metrics
 

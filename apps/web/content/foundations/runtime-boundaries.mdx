@@ -1,0 +1,38 @@
+---
+title: "Runtime Boundaries"
+description: "O conceito fundamental que conecta o ecossistema ao SRP."
+order: 4
+references:
+  - title: "SRP Specification — Core Definitions"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srp/v1alpha"
+relatedSystems:
+  - title: "Linux — cgroups & namespaces"
+    url: "https://man7.org/linux/man-pages/man7/namespaces.7.html"
+  - title: "Docker — Container isolation"
+    url: "https://docs.docker.com/engine/security/"
+---
+
+## O que são runtime boundaries
+
+Runtime boundaries são **limites aplicados em tempo de execução** que restringem o que um processo (ou agente) pode aceder. O conceito não é novo — é fundamental em sistemas operativos, containers, e redes.
+
+| Sistema | Boundary | Mecanismo |
+|---|---|---|
+| Linux | Process isolation | cgroups, namespaces |
+| Docker | Container isolation | Filesystem, network |
+| Firewall | Network isolation | iptables, nftables |
+| **SRP** | **Scope isolation** | **Graph traversal + firewall** |
+
+## Por que não existiam para agentes IA
+
+Agentes de IA são **processos cognitivos**, não processos de sistema. Não operam sobre ficheiros e sockets — operam sobre **contexto semântico**.
+
+As ferramentas de isolamento existentes (containers, firewalls, ACLs) operam na camada errada. Protegem o acesso ao ficheiro, mas não protegem o **significado** do ficheiro no contexto arquitectural.
+
+## O que SRP faz diferente
+
+SRP aplica runtime boundaries na camada de **grafo arquitectural** — onde as relações entre componentes são explícitas e navegáveis. O resultado é isolamento de scope para agentes, análogo ao que containers fazem para processos.
+
+A pergunta que SRP responde:
+
+*"Se containers isolam processos, o que isola agentes?"*

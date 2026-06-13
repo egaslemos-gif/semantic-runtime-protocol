@@ -1,0 +1,77 @@
+---
+title: "MCP vs SRP"
+description: "Model Context Protocol conecta ferramentas. SRP governa o que o agente pode alcançar."
+order: 3
+references:
+  - title: "Anthropic — Model Context Protocol"
+    url: "https://modelcontextprotocol.io"
+  - title: "MCP Specification"
+    url: "https://spec.modelcontextprotocol.io"
+furtherReading:
+  - title: "Anthropic — Introducing the Model Context Protocol"
+    url: "https://www.anthropic.com/news/model-context-protocol"
+relatedSystems:
+  - title: "OpenAI — Function calling"
+    url: "https://platform.openai.com/docs/guides/function-calling"
+  - title: "Google — Gemini tool use"
+    url: "https://ai.google.dev/gemini-api/docs/function-calling"
+---
+
+## O que cada um faz
+
+**MCP** responde: *"Como o agente se conecta a ferramentas e fontes de dados externas?"*
+
+**SRP** responde: *"Que caminhos arquitecturais o agente pode percorrer?"*
+
+MCP é um **protocolo de conectividade**. SRP é uma **camada de governança**.
+
+## Comparação directa
+
+| Dimensão | MCP | SRP |
+|---|---|---|
+| Objectivo | Conectar agentes a ferramentas | Governar scope de traversal |
+| Tipo | Protocolo de comunicação | Runtime de segurança |
+| Análogo | USB / HTTP | Firewall / ACL |
+| Controla | Como conectar | O que pode ser alcançado |
+| Scope isolation | Não (por design) | Sim (core feature) |
+| Determinístico | N/A (transporte) | Sim |
+
+## Onde MCP é forte
+
+MCP resolve um problema real e importante:
+
+- Padrão universal para tool calling
+- Separação entre client (agente) e server (ferramenta)
+- Discovery de capabilities
+- Interoperabilidade entre fornecedores de modelos
+- Ecossistema crescente de MCP servers
+
+MCP é para agentes o que HTTP é para a web: infraestrutura de transporte.
+
+## Onde MCP não resolve
+
+MCP define **como** um agente acede a uma ferramenta. Não define **se deveria**.
+
+Um agente com acesso a um MCP server de base de dados pode:
+
+- Ler qualquer tabela
+- Executar qualquer query
+- Aceder a dados de qualquer scope
+
+MCP não distingue entre "ler tabela de sessões" (permitido) e "ler tabela de credenciais" (scope leakage). Isso não é um defeito — MCP é um protocolo de transporte, não um sistema de governança.
+
+## Como funcionam juntos
+
+```
+Agente
+  │
+  ├── MCP Server: Database    ──┐
+  ├── MCP Server: FileSystem  ──┤── SRP Firewall
+  └── MCP Server: API         ──┘      │
+                                        ▼
+                              Scope-filtered access
+```
+
+SRP pode operar como uma camada entre o agente e os MCP servers, filtrando quais recursos de cada server o agente pode alcançar dado o scope da sessão atual.
+
+MCP conecta. SRP governa.

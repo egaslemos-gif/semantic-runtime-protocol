@@ -1,6 +1,6 @@
 # Runtime Resource Governance
 
-To protect the Semantic OS from resource exhaustion during "Fanout Bomb" stress tests or massive Agent pressure.
+To protect the SRP (formerly SRP) from resource exhaustion during "Fanout Bomb" stress tests or massive Agent pressure.
 
 ## Resource Constraints
 

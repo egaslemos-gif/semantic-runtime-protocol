@@ -2,7 +2,7 @@ export class IntentCanonicalizer {
     
     // In a real system, this index is generated at compile time from frontmatter aliases
     private static readonly ALIAS_MAP: Record<string, string> = {
-        "auth rules": "system.auth.runtime",
+        "auth rules": "server.auth.runtime",
         "frontend standards": "system.ui.standards",
         "database constraints": "infrastructure.db.constraints"
     };

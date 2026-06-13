@@ -1,0 +1,54 @@
+---
+title: "Architectural Drift"
+description: "Quando o agente corrompe a arquitetura ao longo de múltiplas iterações."
+order: 4
+references:
+  - title: "Martin Fowler — Architectural Erosion"
+    url: "https://martinfowler.com/bliki/DesignStaminaHypothesis.html"
+  - title: "Anthropic — Claude Code best practices"
+    url: "https://docs.anthropic.com/en/docs/claude-code/best-practices"
+relatedSystems:
+  - title: "ArchUnit — Architecture testing"
+    url: "https://www.archunit.org"
+  - title: "Madge — Dependency analysis"
+    url: "https://github.com/pahen/madge"
+---
+
+## Definição
+
+Architectural drift acontece quando um agente de IA **gradualmente corrompe as fronteiras arquitecturais** de um sistema ao longo de múltiplas sessões de trabalho.
+
+Cada alteração individual é válida. O acumulado é **destruição arquitectural**.
+
+## Por que acontece
+
+Agentes de IA não possuem **modelo arquitectural persistente**. Cada sessão reconstrói a compreensão do sistema a partir do código disponível — sem conhecimento de:
+
+- Decisões de design anteriores
+- Fronteiras intencionais entre módulos
+- Restrições de acoplamento
+
+O agente optimiza localmente (resolver a tarefa imediata) sem preservar invariantes globais (a arquitectura).
+
+## Exemplo real
+
+Sessão 1: "Move validation logic closer to the handler." → Agente move validação do middleware para o handler. Válido.
+
+Sessão 4: "Reduce code duplication." → Agente detecta validação duplicada entre handler e service layer. Combina-os. Válido isoladamente.
+
+Sessão 8: "Simplify the auth flow." → O agente agora tem validação, autenticação, e autorização todos no handler. Inlina o JWT secret. O handler tem 400 linhas. A arquitectura colapsou.
+
+Nenhuma sessão produziu um erro. O resultado final é um **monólito acidental**.
+
+## Mitigação tradicional
+
+- **Architecture Decision Records (ADRs)**: Documentar decisões
+- **Linting rules**: Restringir imports entre módulos
+- **Code review**: Humanos verificam drift manualmente
+- **Architecture tests**: ArchUnit, dependency-cruiser
+
+## Limitações remanescentes
+
+ADRs e linting são **estáticos**. O agente não os lê automaticamente, e mesmo que os leia, não tem como **aplicar** as restrições durante o traversal.
+
+Architecture tests verificam **após** a alteração. SRP previne **antes** — o agente não consegue alcançar nós fora do scope definido para a sessão, independentemente de quantas sessões acumuladas existam.

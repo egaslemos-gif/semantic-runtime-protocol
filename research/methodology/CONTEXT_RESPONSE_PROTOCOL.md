@@ -7,7 +7,7 @@ Defines the structure of the JSON payload returned to AI Agents via the API laye
 ```json
 {
   "query_type": "constraints",
-  "target": "system.auth",
+  "target": "server.auth",
   "budget_consumed": 450,
   "context": [ ... pruned GraphNodes ... ],
   "governance_warnings": [

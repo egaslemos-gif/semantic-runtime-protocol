@@ -4,7 +4,7 @@
 
 ## 1. The Intent Canonicalizer
 RAG architectures attempt to guess what an agent wants via fuzzy search (Cosine Similarity). SRP **rejects** guessing.
-If an agent asks for `"user authentication logic"`, the `IntentCanonicalizer` consults a strict O(1) Dictionary built during the Compile Phase. If it maps perfectly to `system.auth`, the query proceeds. If it does not, the query is dropped (`QUERY_REJECTED`).
+If an agent asks for `"user authentication logic"`, the `IntentCanonicalizer` consults a strict O(1) Dictionary built during the Compile Phase. If it maps perfectly to `server.auth`, the query proceeds. If it does not, the query is dropped (`QUERY_REJECTED`).
 
 There is no hallucination at the API boundary.
 

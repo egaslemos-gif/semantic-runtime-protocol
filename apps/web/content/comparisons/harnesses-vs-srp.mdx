@@ -1,0 +1,66 @@
+---
+title: "Harnesses vs SRP"
+description: "Harnesses controlam execução. SRP controla scope arquitectural."
+order: 4
+references:
+  - title: "OpenAI — Agent SDK"
+    url: "https://github.com/openai/openai-agents-python"
+  - title: "Anthropic — Claude Code"
+    url: "https://docs.anthropic.com/en/docs/claude-code/overview"
+relatedSystems:
+  - title: "LangGraph"
+    url: "https://langchain-ai.github.io/langgraph/"
+  - title: "CrewAI"
+    url: "https://www.crewai.com"
+  - title: "AutoGen"
+    url: "https://github.com/microsoft/autogen"
+---
+
+## O que cada um faz
+
+**Harnesses** respondem: *"Como controlar o fluxo de execução de um agente?"*
+
+**SRP** responde: *"Que partes da arquitectura o agente pode alcançar durante a execução?"*
+
+Harnesses são **orchestration frameworks**. SRP é uma **runtime governance layer**.
+
+## Comparação directa
+
+| Dimensão | Harnesses | SRP |
+|---|---|---|
+| Objectivo | Orquestrar execução | Governar scope |
+| Exemplos | LangGraph, CrewAI, AutoGen | SRP Firewall, Traversal Engine |
+| Controla | Fluxo, loops, delegação | Boundaries, traversal, isolation |
+| Análogo | Process manager | Firewall |
+| Scope isolation | Limitado (role-based) | Nativo (graph-based) |
+| Granularidade | Por agente / por step | Por nó / por edge |
+
+## Onde Harnesses são fortes
+
+Harnesses resolvem problemas reais de orquestração:
+
+- Definir workflows multi-step
+- Coordenar múltiplos agentes
+- Implementar human-in-the-loop
+- Gerir estado entre iterações
+- Definir condições de paragem
+
+## Onde Harnesses não resolvem
+
+Harnesses controlam **o que o agente faz** (sequência de ações). Não controlam **o que o agente vê** (scope de contexto).
+
+Um agente dentro de um LangGraph workflow pode ter acesso definido por ferramentas, mas o conteúdo que cada ferramenta retorna não é filtrado por scope arquitectural.
+
+A distinção:
+
+- Harness: "O agente só pode usar as ferramentas A, B e C"
+- SRP: "Ao usar a ferramenta A, o agente só pode alcançar nós dentro do scope `server.auth`, não `server.auth.secrets`"
+
+## Complementaridade
+
+Harnesses e SRP operam em camadas diferentes:
+
+- Harness: **macro** — controlo de fluxo e orquestração
+- SRP: **micro** — controlo de scope e traversal dentro de cada step
+
+Um sistema de produção pode usar LangGraph para orquestrar o fluxo e SRP para governar o scope de cada step individual.

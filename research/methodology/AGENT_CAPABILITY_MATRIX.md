@@ -1,6 +1,6 @@
 # Agent Capability Matrix
 
-Multitenancy requires strict Role-Based Access Control at the epistemological level. Not all agents possess the same rights to query or traverse the Semantic OS.
+Multitenancy requires strict Role-Based Access Control at the epistemological level. Not all agents possess the same rights to query or traverse the SRP (formerly SRP).
 
 ## Capability Matrix
 

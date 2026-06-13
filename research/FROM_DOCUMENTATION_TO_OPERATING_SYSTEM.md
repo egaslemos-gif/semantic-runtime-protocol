@@ -1,7 +1,7 @@
 # From Documentation to Operating System
 
 ## The Genesis: MatchDay
-The Semantic OS did not start as an abstract protocol. It was born out of operational necessity during the development of MatchDay, an enterprise sports SaaS platform.
+The SRP (formerly SRP) did not start as an abstract protocol. It was born out of operational necessity during the development of MatchDay, an enterprise sports SaaS platform.
 
 As MatchDay scaled, we encountered a breaking point common to all modern AI-assisted engineering teams: **The Fragmentation of Truth.**
 We had architectural rules written in Markdown, code written in TypeScript, UI standards defined in Figma, and database schemas residing in Prisma.
@@ -17,4 +17,4 @@ We needed a system that actively *enforced* documentation.
 3. **Phase 3:** We built a Runtime in memory to traverse this graph safely.
 4. **Phase 4:** We built a Firewall and Adapters to expose this graph to external agents.
 
-MatchDay's documentation ceased to be a repository of text. It became the **Semantic OS**—a living, computationally governed Hypervisor that dictates what our AI agents are allowed to "know" and do. We stopped documenting our system, and started compiling it.
+MatchDay's documentation ceased to be a repository of text. It became the **SRP**—a living, computationally governed isolation layer that dictates what our AI agents are allowed to "know" and do. We stopped documenting our system, and started compiling it.

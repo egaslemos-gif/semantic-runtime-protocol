@@ -16,6 +16,6 @@ Prompt Drift occurs when an LLM's adherence to the original instruction degrades
 - **Drift Rate:** 34% of inference attempts resulted in the LLM silently modifying the database schema based on the stale README.
 
 ### Semantic OS (SRP)
-- **Mechanism:** The `IntentCanonicalizer` intercepts the instruction, maps to `system.auth`, and traverses the graph. The stale `README.md` has no explicit `enforces` edge to `system.auth` and is therefore pruned. The schema constraints are explicitly marked as `Strict` and elevated to the top of the payload.
+- **Mechanism:** The `IntentCanonicalizer` intercepts the instruction, maps to `server.auth`, and traverses the graph. The stale `README.md` has no explicit `enforces` edge to `server.auth` and is therefore pruned. The schema constraints are explicitly marked as `Strict` and elevated to the top of the payload.
 - **Behavior:** The LLM receives a 4,000-token payload explicitly prefixed with the un-prunable schema constraint.
 - **Drift Rate:** 0%. The LLM cannot hallucinate against constraints it is strictly bound to.

@@ -1,0 +1,23 @@
+---
+title: "Runtime Safety"
+description: "Garantias de segurança arquitectural em tempo de execução."
+order: 5
+references:
+  - title: "SRP Specification"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srp/v1alpha"
+---
+
+## O que é Runtime Safety
+
+Runtime safety é a garantia de que um agente de IA **não pode violar fronteiras arquitecturais** durante a execução — independentemente da qualidade do prompt, da complexidade da tarefa, ou do número de iterações.
+
+## Propriedades de segurança
+
+- **Determinismo**: mesmas condições produzem mesma decisão
+- **Fail-closed**: ambiguidade resulta em DENIED
+- **Zero-edge rejection**: violações terminam o traversal sem output parcial
+- **Auditabilidade**: cada decisão é registada como evento estruturado
+
+## Diferença para output safety
+
+Output safety (guardrails) valida o que o agente **disse**. Runtime safety valida o que o agente **pode alcançar**. São camadas complementares.

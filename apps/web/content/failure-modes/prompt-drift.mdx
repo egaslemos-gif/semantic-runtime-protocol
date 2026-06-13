@@ -1,0 +1,65 @@
+---
+title: "Prompt Drift"
+description: "Quando o comportamento do agente diverge silenciosamente da intenção original."
+order: 1
+references:
+  - title: "Anthropic — Building effective agents"
+    url: "https://docs.anthropic.com/en/docs/build-with-claude/agent"
+  - title: "OpenAI — Prompt engineering guide"
+    url: "https://platform.openai.com/docs/guides/prompt-engineering"
+furtherReading:
+  - title: "Devin AI post-mortems — Hacker News"
+    url: "https://news.ycombinator.com/item?id=39679787"
+relatedSystems:
+  - title: "LangSmith — Tracing & observability"
+    url: "https://smith.langchain.com"
+  - title: "Braintrust — Eval framework"
+    url: "https://www.braintrust.dev"
+---
+
+## Definição
+
+Prompt drift ocorre quando um agente de IA **gradualmente diverge** da intenção original ao longo de múltiplas iterações, sem sinal de erro explícito.
+
+O agente não falha. Ele **desliza**.
+
+## Por que acontece
+
+Agentes operam sobre context windows finitas. A cada iteração, o agente reconstrói a sua compreensão do estado a partir do contexto disponível — mas **sem memória estrutural** do que veio antes.
+
+O resultado:
+
+- A intenção original perde prioridade à medida que novo contexto é adicionado
+- O agente otimiza para o contexto **mais recente**, não para o objetivo **original**
+- Alterações incrementais parecem razoáveis isoladamente, mas acumulam distorção
+
+## Exemplo real
+
+```
+Prompt: "Simplifica a lógica de validação de sessão sem alterar a interface pública."
+```
+
+Iteração 1: O agente refatora a validação. Correto.
+
+Iteração 3: O agente detecta duplicação entre validação e autenticação. Combina-os.
+
+Iteração 5: O agente move a validação combinada para o frontend "para reduzir latência."
+
+Nenhuma iteração individual foi tecnicamente incorreta. Mas o resultado final **viola a intenção original** — a interface pública mudou, e a validação saiu do server.
+
+## Mitigação tradicional
+
+- **Prompt pinning**: Repetir a instrução original em cada iteração
+- **Evals**: Comparar output contra golden datasets
+- **Human-in-the-loop**: Revisão manual periódica
+- **Chain-of-thought constraints**: Forçar o agente a justificar cada alteração
+
+## Limitações remanescentes
+
+Todas estas abordagens operam na camada de **output** — verificam o que o agente *produziu*.
+
+Nenhuma opera na camada de **traversal** — controlam o que o agente *pode alcançar*.
+
+Prompt drift não é um problema de prompt. É um problema de **ausência de runtime boundaries**. O agente não desliza porque o prompt é fraco. Desliza porque **nada impede** que o contexto disponível mude a sua trajetória.
+
+SRP resolve isto ao nível do traversal: o agente não pode alcançar `frontend.session` a partir de um scope `server.auth` — independentemente do que o prompt diz.

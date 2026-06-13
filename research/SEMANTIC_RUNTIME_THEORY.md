@@ -12,7 +12,7 @@ If an application is a graph of dependencies (A calls B, B calls C), the *knowle
 
 Semantic Runtime Theory dictates that this Knowledge Graph cannot be queried using full-text search. It must be traversed using graph algorithms (Breadth-First Search).
 
-When an agent requests `system.checkout`, the Semantic OS does not search for the word "checkout" in the codebase. It:
+When an agent requests `system.checkout`, the SRP (formerly SRP) does not search for the word "checkout" in the codebase. It:
 1. Locates the exact Canonical Node `system.checkout`.
 2. Traverses outbound edges (`depends_on: payment.gateway`, `enforces: pci.compliance`).
 3. Evaluates the Computational Budget (e.g., maximum 5 hops).

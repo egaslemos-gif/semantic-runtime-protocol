@@ -4,8 +4,8 @@ Deploying the SRP Introspector Playground and Documentation to Vercel takes less
 
 ## Step 1: Clone and Setup
 ```bash
-git clone https://github.com/egaslemos-gif/Runtime-Oriented-Product-Engineering.git
-cd Runtime-Oriented-Product-Engineering
+git clone https://github.com/egaslemos-gif/semantic-runtime-protocol.git
+cd semantic-runtime-protocol
 ```
 
 ## Step 2: Push to GitHub

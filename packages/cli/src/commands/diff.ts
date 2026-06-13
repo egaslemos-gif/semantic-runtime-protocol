@@ -3,7 +3,7 @@ export const diffCommand = async (buildA: string, buildB: string) => {
   
   console.log(`
 [GOVERNANCE CHANGES]
-+ system.auth.rules enforces system.db.encryption (ADDED)
++ server.auth.rules enforces system.db.encryption (ADDED)
 - system.legacy.auth depends_on system.legacy.db (REMOVED)
 
 [ENTROPY ANALYSIS]

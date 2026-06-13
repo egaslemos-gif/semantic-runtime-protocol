@@ -1,0 +1,71 @@
+---
+title: "Scope Leakage"
+description: "Quando o agente acessa contexto fora do seu scope autorizado."
+order: 2
+references:
+  - title: "OWASP — LLM Top 10"
+    url: "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+  - title: "Anthropic — Prompt injection mitigations"
+    url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/mitigate-prompt-injection"
+furtherReading:
+  - title: "Not what you've signed up for — Adversarial NLP"
+    url: "https://arxiv.org/abs/2302.12173"
+relatedSystems:
+  - title: "Guardrails AI"
+    url: "https://www.guardrailsai.com"
+  - title: "LlamaGuard"
+    url: "https://github.com/meta-llama/PurpleLlama"
+---
+
+## Definição
+
+Scope leakage acontece quando um agente de IA **acessa, modifica ou expõe** informação que pertence a um scope arquitectural diferente do seu scope autorizado.
+
+Não é um bug. É uma **ausência de limites**.
+
+## Por que acontece
+
+Sistemas de retrieval (RAG, embeddings, full-text search) recuperam contexto baseado em **relevância semântica** — não em **permissão arquitetural**.
+
+Se um ficheiro é semanticamente relevante para a query do agente, ele será incluído no contexto — mesmo que pertença a:
+
+- Um módulo de segurança diferente
+- Um serviço backend que o frontend não deveria conhecer
+- Secrets, tokens de autenticação, ou configurações de produção
+
+O agente não *decide* violar scope. O **sistema de retrieval entrega** contexto que não deveria estar disponível.
+
+## Exemplo real
+
+```
+Prompt: "Otimiza a middleware de autenticação para reduzir latência."
+```
+
+O agente recebe no contexto:
+
+- `server/auth/middleware.ts` ← correto
+- `server/auth/jwt-secrets.ts` ← scope leakage
+- `server/auth/rate-limiter.ts` ← correto
+- `server/database/credentials.ts` ← scope leakage crítico
+
+O agente "otimiza" movendo a validação JWT para inline, expondo o secret no ficheiro da middleware. Tecnicamente funcional. Arquitecturalmente **catastrófico**.
+
+## Mitigação tradicional
+
+- **File-level access control**: Restringir quais ficheiros o agente pode ler
+- **Prompt instructions**: "Não acesses ficheiros fora de /auth/"
+- **Output scanning**: Verificar se o output contém secrets
+- **Gitignore-based filtering**: Excluir ficheiros sensíveis da indexação
+
+## Limitações remanescentes
+
+Estas abordagens são **estáticas** e **baseadas em listas**. Não compreendem relações arquitecturais.
+
+Um ficheiro pode ser *permitido* individualmente mas *proibido* no contexto de um traversal específico. Scope leakage não é sobre ficheiros — é sobre **relações entre nós num grafo arquitectural**.
+
+SRP resolve isto com **graph-based scope isolation**: o firewall avalia cada edge traversal contra as regras de scope. Se a intenção origina em `frontend` e o target está em `server.auth.secrets`, o traversal é rejeitado — independentemente de relevância semântica.
+
+```
+> BOUNDARY_VIOLATION [frontend → server.auth.secrets]
+> TERMINATED: Cross-scope traversal rejected.
+```

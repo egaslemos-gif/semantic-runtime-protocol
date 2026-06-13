@@ -1,0 +1,72 @@
+---
+title: "Context Explosion"
+description: "Quando o volume de contexto excede a capacidade de processamento do agente."
+order: 3
+references:
+  - title: "OpenAI — Managing context length"
+    url: "https://platform.openai.com/docs/guides/prompt-engineering/tactic-split-complex-tasks-into-simpler-subtasks"
+  - title: "Google — Long context capabilities in Gemini"
+    url: "https://ai.google.dev/gemini-api/docs/long-context"
+furtherReading:
+  - title: "Lost in the Middle — Performance degrades with long context"
+    url: "https://arxiv.org/abs/2307.03172"
+relatedSystems:
+  - title: "MemGPT / Letta"
+    url: "https://github.com/letta-ai/letta"
+  - title: "LangChain — Context compression"
+    url: "https://python.langchain.com/docs/how_to/#retrievers"
+---
+
+## Definição
+
+Context explosion ocorre quando o sistema de retrieval entrega **mais contexto do que o agente pode processar eficazmente**, resultando em degradação de qualidade, alucinações, ou perda de informação crítica.
+
+## Por que acontece
+
+Sistemas RAG modernos são optimizados para **recall** — recuperar o máximo de informação potencialmente relevante. Mas:
+
+- Context windows são finitas (4K–200K tokens)
+- Modelos perdem precisão em contextos longos ("Lost in the Middle")
+- Cada token adicional reduz a atenção disponível para tokens críticos
+- Não existe mecanismo de **priorização arquitectural** — apenas relevância semântica
+
+O problema escala com o tamanho do repositório. Um projecto com 500 ficheiros produz centenas de chunks "relevantes" para qualquer query genérica.
+
+## Exemplo real
+
+```
+Prompt: "Refatora o módulo de autenticação para suportar OAuth2."
+```
+
+O sistema RAG recupera:
+
+- 12 ficheiros de autenticação
+- 8 ficheiros de testes
+- 6 ficheiros de configuração
+- 4 ficheiros de documentação
+- 3 ficheiros de migração de base de dados
+
+Total: ~45.000 tokens de contexto. O modelo:
+
+1. Ignora os ficheiros de migração (estavam no meio)
+2. Mistura lógica de teste com lógica de produção
+3. Gera uma implementação OAuth2 que conflita com as migrações existentes
+
+## Mitigação tradicional
+
+- **Chunking strategies**: Dividir documentos em chunks menores
+- **Re-ranking**: Reordenar chunks por relevância após retrieval
+- **Context window management**: Limitar tokens por query
+- **Summarization**: Resumir contexto antes de enviar ao modelo
+- **Long-context models**: Usar modelos com janelas maiores (Gemini, Claude)
+
+## Limitações remanescentes
+
+Estas técnicas reduzem o *volume* de contexto, mas não a sua *relevância arquitectural*.
+
+Um chunk pode ser semanticamente relevante mas arquitecturalmente irrelevante para a intenção do agente. Re-ranking por similaridade não distingue:
+
+- contexto que o agente *precisa* para a tarefa
+- contexto que o agente *não deveria ver* por razões de scope
+
+SRP resolve context explosion na origem: o traversal engine **limita o grafo navegável** antes de qualquer retrieval. O agente recebe apenas os nós dentro do seu scope — o contexto já chega filtrado por relevância **arquitectural**, não apenas semântica.

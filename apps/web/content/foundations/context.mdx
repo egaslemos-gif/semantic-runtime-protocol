@@ -1,0 +1,43 @@
+---
+title: "Context"
+description: "A primitiva mais crítica em sistemas de IA — e por que precisa de governança."
+order: 1
+references:
+  - title: "Anthropic — Context window best practices"
+    url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/use-the-long-context-window"
+  - title: "OpenAI — GPT best practices"
+    url: "https://platform.openai.com/docs/guides/prompt-engineering"
+furtherReading:
+  - title: "Vaswani et al. — Attention Is All You Need"
+    url: "https://arxiv.org/abs/1706.03762"
+relatedSystems:
+  - title: "LangChain — Context management"
+    url: "https://python.langchain.com/docs/concepts/"
+---
+
+## O que é contexto
+
+Em sistemas de IA, contexto é a **informação que o modelo recebe para tomar decisões**. Inclui: o prompt, documentos recuperados, histórico de conversação, e metadata do sistema.
+
+O modelo não "sabe" nada para além do que está no contexto. Não tem memória persistente. Não acede ao repositório directamente. Opera **exclusivamente** sobre o que lhe é fornecido na context window.
+
+## Por que é a primitiva mais crítica
+
+Se o contexto está correcto, o agente produz resultados correctos.
+Se o contexto contém informação de scope errado, o agente produz **violações arquitecturais correctamente justificadas**.
+
+O problema nunca é o modelo "ser estúpido". O problema é o modelo ser **inteligente com contexto errado**.
+
+## Onde os sistemas actuais falham
+
+Os sistemas de retrieval (RAG, embeddings) resolvem **o que é relevante**. Não resolvem **o que é permitido**.
+
+Relevância semântica ≠ Permissão arquitectural.
+
+Um ficheiro pode ser altamente relevante para a tarefa e simultaneamente proibido pelo scope. Sistemas baseados apenas em relevância não fazem esta distinção.
+
+## Conexão com runtime safety
+
+SRP opera na camada de contexto — filtra o que o agente pode receber **antes** de qualquer processamento. Não corrige output. Controla input.
+
+A governança de contexto é a fundação de todo o runtime safety.

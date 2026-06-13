@@ -1,9 +1,9 @@
 # CI Governance Bot Recipe
 
-This recipe enforces the Semantic OS operational truth at the CI/CD boundary.
+This recipe enforces the SRP operational truth at the CI/CD boundary.
 
 ## How it Works
-The CI bot hooks into GitHub Actions on `pull_request`. It reads the files changed in the PR, maps them to their `CanonicalIds`, and queries the Semantic OS to ensure no `Strict` constraints are violated by the code diff.
+The CI bot hooks into GitHub Actions on `pull_request`. It reads the files changed in the PR, maps them to their `CanonicalIds`, and queries the SRP to ensure no `Strict` constraints are violated by the code diff.
 
 ## Setup
 Add the following to `.github/workflows/semantic-audit.yml`:
@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Semantic OS Assertion
+      - name: Run SRP Assertion
         run: |
           # The CLI uses the ci-governance adapter
           npx semantic-os validate-diff --pr=${{ github.event.number }}

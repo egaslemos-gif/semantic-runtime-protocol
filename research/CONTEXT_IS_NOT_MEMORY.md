@@ -17,6 +17,6 @@ RAG (Retrieval-Augmented Generation) was designed to solve memory. It chunks doc
 But architecture is not a similarity problem. Architecture is a graph of explicit, non-negotiable relationships.
 If you ask a Vector DB: *"Give me everything related to User Auth"*, it will return 5 documents that contain the words "User" and "Auth". It might miss the document titled `Infrastructure Cryptography Standards` because the words don't match, even though that document strictly `enforces` the Auth module.
 
-The Semantic OS abandons RAG entirely. It compiles the architecture into an explicit graph. When an agent queries `system.auth`, the engine does not perform a cosine similarity search. It traverses the explicit `enforces` edges deterministically.
+The SRP (formerly SRP) abandons RAG entirely. It compiles the architecture into an explicit graph. When an agent queries `server.auth`, the engine does not perform a cosine similarity search. It traverses the explicit `enforces` edges deterministically.
 
 Context is not memory. Context is governed operational truth.

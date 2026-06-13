@@ -1,5 +1,5 @@
 {
-  "name": "runtime-oriented-product-engineering",
+  "name": "semantic-runtime-protocol",
   "private": true,
   "engines": {
     "node": ">=18"

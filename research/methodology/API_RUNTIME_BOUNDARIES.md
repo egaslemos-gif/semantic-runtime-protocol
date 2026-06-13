@@ -1,6 +1,6 @@
 # API Runtime Boundaries
 
-The Next.js API routes (`/api/context/*`) are the edge of the Semantic OS. They interface between MCP clients and the Memory Singleton.
+The Next.js API routes (`/api/context/*`) are the edge of the SRP (formerly SRP). They interface between MCP clients and the Memory Singleton.
 
 ## Strict Boundaries
 

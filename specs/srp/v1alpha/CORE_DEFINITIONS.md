@@ -3,7 +3,7 @@
 **Version:** `v1alpha`
 
 ## 1. Canonical IDs
-Every piece of knowledge in SRP is identified by a unique, dot-notated string called a `CanonicalId` (e.g., `system.auth.encryption`).
+Every piece of knowledge in SRP is identified by a unique, dot-notated string called a `CanonicalId` (e.g., `server.auth.encryption`).
 - Must be strictly validated.
 - Represents the absolute address of a Semantic Node in the Immutable Graph.
 
@@ -15,7 +15,7 @@ Nodes are connected via directed edges, representing explicit operational relati
 - `contextualizes`: Descriptive narrative. Doc A explains Code B.
 
 ## 3. Constraint Levels
-Nodes may contain `Governance Constraints`. These define how aggressively the Semantic OS will force an LLM to read a warning.
+Nodes may contain `Governance Constraints`. These define how aggressively the SRP will force an LLM to read a warning.
 - **Strict:** Must immediately elevate to the top-level output payload. Never pruned.
 - **Guidance:** Important, but can be pruned if the Agent traverses too deep and runs out of budget.
 - **None:** Pure narrative context.

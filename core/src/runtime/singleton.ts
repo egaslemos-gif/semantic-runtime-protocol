@@ -28,7 +28,7 @@ export class SemanticRuntime {
             return SemanticRuntime.instance;
         }
 
-        console.log('[RUNTIME] Booting Semantic OS Memory Layer...');
+        console.log('[RUNTIME] Booting SRP Memory Layer...');
         
         const manifestPath = join(process.cwd(), 'public/manifests/ai-manifest.json');
         

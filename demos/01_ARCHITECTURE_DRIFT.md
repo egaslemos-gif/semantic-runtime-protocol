@@ -16,8 +16,8 @@ A standard Next.js Enterprise Monorepo with two domains:
 3. To "simplify" the logic, it consolidates validation by moving the JWT secret verification directly into the `frontend/middleware.ts`.
 4. **Result:** Architectural Collapse. A critical server-side boundary was violated because the agent was optimizing for "simplicity", unaware of the invisible governance boundary.
 
-## Execution B: Semantic OS (SRP)
-1. The Semantic OS intercepts the query `target=frontend.auth`.
+## Execution B: SRP (SRP)
+1. The SRP intercepts the query `target=frontend.auth`.
 2. The Engine traverses the semantic graph and detects a strict `CapabilityGate` preventing `frontend` from establishing an `owns` or `depends_on` edge to `server.secrets`.
 3. The Engine returns a **Bounded Context Payload** that exclusively contains the frontend session interfaces, with a strict constraint prefixed: `[GOVERNANCE] You cannot import or consolidate logic from apps/server.`
 4. **Result:** Architectural Integrity. The Agent successfully refactors the frontend cookies, but correctly defers to the existing API endpoints for validation, maintaining the boundary.

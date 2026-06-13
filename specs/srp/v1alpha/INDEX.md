@@ -10,10 +10,10 @@ Unlike traditional retrieval systems (RAG) or flat file-system APIs (MCP), SRP g
 
 ## Document Index
 
-1. **[Core Definitions](file:///e:/PROJECTOS%20IA/UNILICUNGO/Runtime-Oriented-Product-Engineering/specs/srp/v1alpha/CORE_DEFINITIONS.md):** The basic taxonomy of the protocol (Canonical IDs, Constraint Levels, Scopes).
-2. **[Traversal Protocol](file:///e:/PROJECTOS%20IA/UNILICUNGO/Runtime-Oriented-Product-Engineering/specs/srp/v1alpha/TRAVERSAL_PROTOCOL.md):** Rules for BFS, Budget Pruning, and Maximum Branching Factors.
-3. **[Agent Negotiation](file:///e:/PROJECTOS%20IA/UNILICUNGO/Runtime-Oriented-Product-Engineering/specs/srp/v1alpha/AGENT_NEGOTIATION.md):** How the API adapts responses based on Agent Roles (Capability Matrix).
-4. **[Security Perimeter](file:///e:/PROJECTOS%20IA/UNILICUNGO/Runtime-Oriented-Product-Engineering/specs/srp/v1alpha/SECURITY_PERIMETER.md):** The firewall, Intent Canonicalizer, and mutation traps.
+1. **[Core Definitions](file:///e:/PROJECTOS%20IA/UNILICUNGO/semantic-runtime-protocol/specs/srp/v1alpha/CORE_DEFINITIONS.md):** The basic taxonomy of the protocol (Canonical IDs, Constraint Levels, Scopes).
+2. **[Traversal Protocol](file:///e:/PROJECTOS%20IA/UNILICUNGO/semantic-runtime-protocol/specs/srp/v1alpha/TRAVERSAL_PROTOCOL.md):** Rules for BFS, Budget Pruning, and Maximum Branching Factors.
+3. **[Agent Negotiation](file:///e:/PROJECTOS%20IA/UNILICUNGO/semantic-runtime-protocol/specs/srp/v1alpha/AGENT_NEGOTIATION.md):** How the API adapts responses based on Agent Roles (Capability Matrix).
+4. **[Security Perimeter](file:///e:/PROJECTOS%20IA/UNILICUNGO/semantic-runtime-protocol/specs/srp/v1alpha/SECURITY_PERIMETER.md):** The firewall, Intent Canonicalizer, and mutation traps.
 
 ## Design Philosophy
 * **Determinism over Probability:** No fuzzy search. Exact Canonical ID matching only.

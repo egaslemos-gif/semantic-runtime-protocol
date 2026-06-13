@@ -25,7 +25,7 @@ AI agents do not fail because they lack intelligence. They fail because they ope
 SRP enforces deterministic runtime boundaries for AI-assisted engineering workflows. It mathematically intercepts the agent's context window and physically drops the traversal paths that violate architecture.
 
 ## 3. Demonstration
-![SRP Blocking Traversal](https://raw.githubusercontent.com/egaslemos-gif/Runtime-Oriented-Product-Engineering/main/apps/web/public/demo-placeholder.gif)
+![SRP Blocking Traversal](https://raw.githubusercontent.com/egaslemos-gif/semantic-runtime-protocol/main/apps/web/public/demo-placeholder.gif)
 
 ## 4. What SRP is NOT
 To understand SRP, you must discard the current AI paradigm.

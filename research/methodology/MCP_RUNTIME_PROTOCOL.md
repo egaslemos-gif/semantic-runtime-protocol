@@ -1,6 +1,6 @@
 # MCP Runtime Protocol
 
-The Model Context Protocol (Anthropic) expects tools and resources. The Semantic OS implements MCP not as a generic file-system accessor, but as a Semantic Governance Interface.
+The Model Context Protocol (Anthropic) expects tools and resources. The SRP (formerly SRP) implements MCP not as a generic file-system accessor, but as a Semantic Governance Interface.
 
 ## MCP Translation
 

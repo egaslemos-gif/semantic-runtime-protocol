@@ -1,0 +1,77 @@
+---
+title: "Runtime Boundaries"
+description: "Como SRP define e aplica limites arquitecturais em tempo de execução."
+order: 1
+references:
+  - title: "SRP Specification — Core Definitions"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srp/v1alpha"
+furtherReading:
+  - title: "Liskov Substitution Principle — Design by Contract"
+    url: "https://en.wikipedia.org/wiki/Design_by_contract"
+relatedSystems:
+  - title: "ArchUnit"
+    url: "https://www.archunit.org"
+  - title: "dependency-cruiser"
+    url: "https://github.com/sverweij/dependency-cruiser"
+---
+
+## O que é um Runtime Boundary
+
+Um runtime boundary é um **limite explícito** entre scopes arquitecturais que o SRP aplica durante o traversal de um agente. Não é uma sugestão, uma regra de lint, ou uma convenção — é uma **barreira determinística** que o agente não pode ultrapassar.
+
+```
+[frontend] ──── boundary ──── [server]
+                   │
+              SRP Firewall
+```
+
+## Por que é necessário
+
+Agentes de IA não compreendem arquitectura. Compreendem **texto**. Quando um agente recebe contexto de um repositório, todo o código parece igualmente acessível — não existe conceito nativo de "este módulo não deveria ser visível para esta tarefa".
+
+Runtime boundaries resolvem isto ao definir:
+
+- **Scopes**: grupos de nós com visibilidade partilhada
+- **Rules**: regras de traversal entre scopes
+- **Enforcement**: rejeição determinística de violações
+
+## Como funciona
+
+Cada nó no grafo arquitectural pertence a um scope:
+
+```typescript
+{ id: "server.auth", scope: "server" }
+{ id: "server.auth.secrets", scope: "server" }
+{ id: "frontend.session", scope: "frontend" }
+```
+
+O SRP Firewall avalia cada edge traversal contra as regras de scope:
+
+```typescript
+// Intent origina em frontend → target em server.secrets = DENIED
+evaluateTraversal("frontend", fromNode, toNode)
+// → { status: "DENIED", reason: "Cross-scope traversal rejected." }
+```
+
+## Tipos de boundary
+
+| Tipo | Exemplo | Comportamento |
+|---|---|---|
+| **Cross-scope** | frontend → server.secrets | Bloqueado sempre |
+| **Depth-limited** | server.auth → server.auth.secrets.internal | Bloqueado após profundidade N |
+| **Edge-type restricted** | Apenas edges `depends_on` permitidas | Edges `owns` bloqueadas para agentes externos |
+
+## Configuração via Manifest
+
+```yaml
+# srp.manifest.yaml
+scopes:
+  frontend:
+    allowed_targets: ["server.auth"]
+    denied_targets: ["server.auth.secrets", "server.database"]
+  server:
+    allowed_targets: ["server.*"]
+    denied_targets: ["frontend.*"]
+```
+
+O manifest declara as regras. O traversal engine aplica-as. O resultado é binário: **ALLOWED** ou **BLOCKED**.

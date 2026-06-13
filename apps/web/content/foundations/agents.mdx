@@ -1,0 +1,51 @@
+---
+title: "AI Agents"
+description: "Como agentes operam, onde falham, e por que precisam de runtime boundaries."
+order: 2
+references:
+  - title: "Anthropic — Building effective agents"
+    url: "https://docs.anthropic.com/en/docs/build-with-claude/agent"
+  - title: "OpenAI — Agent SDK"
+    url: "https://github.com/openai/openai-agents-python"
+furtherReading:
+  - title: "Shinn et al. — Reflexion: Language Agents with Verbal Reinforcement Learning"
+    url: "https://arxiv.org/abs/2303.11366"
+relatedSystems:
+  - title: "LangGraph"
+    url: "https://langchain-ai.github.io/langgraph/"
+  - title: "CrewAI"
+    url: "https://www.crewai.com"
+  - title: "AutoGen"
+    url: "https://github.com/microsoft/autogen"
+---
+
+## O que é um AI Agent
+
+Um AI agent é um sistema que usa um modelo de linguagem para **tomar decisões e executar acções** em loop. Diferente de uma chamada simples a uma API, um agente:
+
+- Planeia (decompõe a tarefa)
+- Executa (usa ferramentas)
+- Observa (avalia resultados)
+- Itera (ajusta a estratégia)
+
+## Onde os agentes falham
+
+Agentes não falham por falta de inteligência. Falham por **ausência de fronteiras operacionais**.
+
+Sob pressão de complexidade:
+
+- **Prompt drift**: o comportamento diverge da intenção ao longo de iterações
+- **Scope leakage**: o agente acede a contexto fora do scope autorizado
+- **Architectural drift**: alterações incrementais corrompem a arquitectura
+
+Estes não são bugs do modelo. São **falhas da infraestrutura que envolve o modelo**.
+
+## O que os agent frameworks resolvem
+
+Frameworks como LangGraph, CrewAI, e AutoGen resolvem **orquestração**: como coordenar agentes, definir fluxos, gerir estado.
+
+## O que os agent frameworks não resolvem
+
+Nenhum framework de agentes resolve **governança de scope**: o que o agente pode ver e alcançar dentro de cada step.
+
+Esta lacuna é exactamente onde o SRP opera.

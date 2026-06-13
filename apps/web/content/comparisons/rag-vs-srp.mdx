@@ -1,0 +1,77 @@
+---
+title: "RAG vs SRP"
+description: "Retrieval-Augmented Generation resolve recuperação. SRP resolve governança."
+order: 1
+references:
+  - title: "Lewis et al. — Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+    url: "https://arxiv.org/abs/2005.11401"
+  - title: "LangChain — RAG documentation"
+    url: "https://python.langchain.com/docs/concepts/rag/"
+furtherReading:
+  - title: "Pinecone — RAG architecture guide"
+    url: "https://www.pinecone.io/learn/retrieval-augmented-generation/"
+relatedSystems:
+  - title: "LlamaIndex"
+    url: "https://www.llamaindex.ai"
+  - title: "Weaviate"
+    url: "https://weaviate.io"
+---
+
+## O que cada um faz
+
+**RAG** responde à pergunta: *"Que informação o agente precisa para responder?"*
+
+**SRP** responde à pergunta: *"Que informação o agente tem permissão de alcançar?"*
+
+São camadas complementares, não competitivas.
+
+## Comparação directa
+
+| Dimensão | RAG | SRP |
+|---|---|---|
+| Objectivo | Recuperar contexto relevante | Governar contexto permitido |
+| Mecanismo | Embeddings + similaridade | Graph traversal + scope rules |
+| Opera em | Conteúdo | Arquitectura |
+| Determinístico | Não (probabilístico) | Sim (grafo explícito) |
+| Previne scope leakage | Não | Sim |
+| Melhora qualidade de resposta | Sim | Indirectamente |
+| Camada | Retrieval | Runtime governance |
+
+## Onde RAG é forte
+
+RAG é excelente para:
+
+- Encontrar informação relevante em grandes corpus
+- Aumentar o conhecimento do modelo com dados específicos do domínio
+- Reduzir alucinações com grounding factual
+- Integrar com bases de conhecimento existentes
+
+## Onde RAG não resolve
+
+RAG recupera baseado em **relevância semântica**. Não distingue:
+
+- Um ficheiro de configuração relevante que o agente *deveria* ver
+- Um ficheiro de secrets igualmente relevante que o agente *não deveria* ver
+
+Se `jwt-secrets.ts` é semanticamente similar à query "otimizar autenticação", RAG vai incluí-lo no contexto.
+
+## Como funcionam juntos
+
+```
+Query do Agente
+    │
+    ▼
+┌─────────┐     ┌─────────┐
+│   SRP   │────▶│   RAG   │
+│ Firewall│     │ Retrieval│
+└─────────┘     └─────────┘
+    │                │
+    ▼                ▼
+Scope filtrado   Contexto recuperado
+    │                │
+    └───────┬────────┘
+            ▼
+    Contexto seguro + relevante
+```
+
+SRP filtra **antes** do RAG. O RAG opera apenas sobre o subgrafo que o SRP autorizou. O resultado: contexto que é simultaneamente relevante e arquitecturalmente seguro.

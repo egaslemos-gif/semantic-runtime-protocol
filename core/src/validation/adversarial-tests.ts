@@ -34,7 +34,7 @@ export class AdversarialTests {
     }
 
     private static testFuzzyHallucination() {
-        console.log(`[ATTACK] Firing: "system.auth.rules.*" (Regex Wildcard attempt)`);
+        console.log(`[ATTACK] Firing: "server.auth.rules.*" (Regex Wildcard attempt)`);
         try {
             // Fails the strict Alias or exact dot-notation exact-match ID resolution
             throw new Error('QUERY_REJECTED'); 

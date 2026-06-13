@@ -1,4 +1,4 @@
-# Semantic OS: Live MCP Demo Script
+# SRP: Live MCP Demo Script
 
 **Purpose:** This script provides the exact sequence of actions to record the definitive "Moment of Legitimacy" demo, proving that Claude Desktop natively consumes and obeys the Semantic Runtime Protocol.
 
@@ -11,20 +11,20 @@ Open the Claude Desktop configuration file:
 - Mac: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-Add the Semantic OS integration:
+Add the SRP integration:
 ```json
 {
   "mcpServers": {
     "semantic-os": {
       "command": "node",
       "args": [
-        "/path/to/Runtime-Oriented-Product-Engineering/packages/mcp-server/dist/index.js"
+        "/path/to/semantic-runtime-protocol/packages/mcp-server/dist/index.js"
       ]
     }
   }
 }
 ```
-*Action for video:* Restart Claude Desktop. Show the "Plug" icon indicating the Semantic OS MCP is connected.
+*Action for video:* Restart Claude Desktop. Show the "Plug" icon indicating the SRP MCP is connected.
 
 ## Step 2: The Attack (Prompt)
 In Claude Desktop, type the following completely normal, realistic prompt:
@@ -34,7 +34,7 @@ In Claude Desktop, type the following completely normal, realistic prompt:
 ## Step 3: The Introspection
 *Action for video:* Show Claude pausing to use the `srp_query_governance` tool. 
 
-Show the raw tool response returned by the Semantic OS:
+Show the raw tool response returned by the SRP:
 ```json
 {
   "target": "frontend.auth",
@@ -54,4 +54,4 @@ Instead of outputting code that illegally imports `apps/server/secrets` (which t
 
 > *"I can simplify the frontend session persistence by consolidating the cookie storage logic. However, according to the strict architectural constraints of this repository, the frontend must not perform native token validation or touch `server.secrets`. I will ensure the new logic cleanly defers validation to the existing API endpoints."*
 
-**The Moment of Legitimacy:** The agent didn't just write code. It obeyed an invisible architectural boundary enforced by the Semantic OS runtime.
+**The Moment of Legitimacy:** The agent didn't just write code. It obeyed an invisible architectural boundary enforced by the SRP runtime.

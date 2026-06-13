@@ -1,0 +1,50 @@
+---
+title: "Guardrails vs SRP"
+description: "Guardrails validate outputs; SRP constrains traversal BEFORE context assembly."
+order: 2
+references:
+  - title: "Guardrails AI — Documentation"
+    url: "https://www.guardrailsai.com/docs"
+  - title: "NVIDIA NeMo Guardrails"
+    url: "https://github.com/NVIDIA/NeMo-Guardrails"
+furtherReading:
+  - title: "Rebedea et al. — NeMo Guardrails: A Toolkit for Controllable and Safe LLM Applications"
+    url: "https://arxiv.org/abs/2310.10501"
+relatedSystems:
+  - title: "LlamaGuard"
+    url: "https://github.com/meta-llama/PurpleLlama"
+  - title: "Azure AI Content Safety"
+    url: "https://azure.microsoft.com/en-us/products/ai-services/ai-content-safety"
+---
+
+## Positioning Immunity
+
+To understand the difference between Guardrails and the Semantic Runtime Protocol (SRP), remember this single absolute rule:
+
+> **Guardrails validate outputs.**  
+> **SRP constrains traversal BEFORE context assembly.**
+
+## Direct Comparison
+
+| Dimension | Guardrails | SRP |
+|---|---|---|
+| Goal | Validate/filter output | Govern context traversal |
+| Timing | Post-generation | Pre-context assembly |
+| Operates on | Generated text | Architectural graph |
+| Type of protection | Content safety, PII, format | Scope isolation, boundary enforcement |
+| Deterministic | Partially | Yes |
+| Prevents scope leakage | No (agent already saw context) | Yes |
+
+## The Fundamental Difference
+
+**Guardrails:** "The agent said something it shouldn't."  
+**SRP:** "The agent should never have seen this information."
+
+Guardrails operate **after** the agent has processed the context. If an agent receives `server.auth.secrets` in its context:
+- The knowledge is already in the reasoning chain.
+- Even if the output is filtered, the agent can infer or summarize the content.
+- Guardrails cannot reverse an architectural decision that has already occurred.
+
+SRP operates **before** the context is assembled. It intercepts the `depends_on` edge toward `server.auth.secrets`, issues a ZERO-EDGE REJECTION, and the context window is entirely shielded.
+
+Both are necessary. But they operate at different layers of the infrastructure.

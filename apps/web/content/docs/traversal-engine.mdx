@@ -1,0 +1,74 @@
+---
+title: "Traversal Engine"
+description: "O motor de traversal determinístico que governa a navegação do agente."
+order: 2
+references:
+  - title: "SRP Source — traversal-engine.ts"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/blob/main/apps/web/lib/runtime/traversal-engine.ts"
+relatedSystems:
+  - title: "Neo4j — Graph traversal"
+    url: "https://neo4j.com/docs/graph-data-science/current/algorithms/bfs/"
+---
+
+## O que é
+
+O Traversal Engine é o **componente central** do SRP. Implementa um Breadth-First Search (BFS) determinístico sobre o grafo arquitectural, avaliando cada edge contra o Context Firewall antes de permitir a navegação.
+
+Não é probabilístico. Não usa embeddings. Não aproxima. **Calcula**.
+
+## Como funciona
+
+```
+1. Intent Mapping    → Mapeia a intenção do agente para um nó inicial
+2. BFS Traversal     → Navega o grafo a partir do nó inicial
+3. Firewall Check    → Cada edge é avaliada contra as regras de scope
+4. Decision          → ALLOWED (continua) ou BLOCKED (termina)
+```
+
+## Algoritmo
+
+```typescript
+function simulateTraversal(intent: TraversalIntent): RuntimeEvent[] {
+  const events: RuntimeEvent[] = [];
+  const visited = new Set<string>();
+  const queue = [startNodeId];
+
+  while (queue.length > 0) {
+    const currentId = queue.shift()!;
+    const outgoing = DEMO_GRAPH.edges.filter(e => e.source === currentId);
+
+    for (const edge of outgoing) {
+      const decision = evaluateTraversal(intentScope, currentNode, targetNode);
+
+      if (decision.status === "DENIED") {
+        // Hard stop — zero-edge rejection
+        return events;
+      }
+
+      queue.push(targetNode.id);
+    }
+  }
+
+  return events;
+}
+```
+
+O traversal é **determinístico**: dado o mesmo grafo e a mesma intenção, produz sempre o mesmo resultado. Sem variação. Sem temperatura. Sem alucinação.
+
+## Eventos de runtime
+
+O engine emite eventos estruturados durante o traversal:
+
+| Evento | Significado |
+|---|---|
+| `INTENT_MAPPED` | Intenção mapeada para nó inicial |
+| `EDGE_TRAVERSED` | Edge navegada com sucesso |
+| `BOUNDARY_VIOLATION` | Violação de scope detectada |
+| `TERMINATED` | Traversal terminado (sucesso ou bloqueio) |
+
+## Propriedades
+
+- **Determinístico**: mesmo input → mesmo output, sempre
+- **Auditável**: cada decisão é registada como evento
+- **Fail-fast**: primeira violação termina o traversal
+- **Zero-edge rejection**: violações não produzem output parcial

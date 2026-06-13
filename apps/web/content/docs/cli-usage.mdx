@@ -1,0 +1,36 @@
+---
+title: "CLI Usage"
+description: "Utilização do SRP via linha de comando."
+order: 6
+references:
+  - title: "SRP CLI Package"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/packages/cli"
+---
+
+## Instalação
+
+```bash
+npm install -g srp
+```
+
+## Comandos principais
+
+```bash
+# Proteger um módulo
+srp protect auth-module
+
+# Validar manifest
+srp validate srp.manifest.yaml
+
+# Simular traversal
+srp simulate --intent "refactor session" --scope frontend
+```
+
+## Output
+
+```
+$ srp protect auth-module
+✓ Agent blocked from traversing server.auth.secrets
+```
+
+O CLI opera sobre o mesmo traversal engine e firewall que o runtime. As decisões são idênticas.

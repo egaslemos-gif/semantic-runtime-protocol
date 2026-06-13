@@ -1,0 +1,31 @@
+---
+title: "Case Study: University Scheduling"
+description: "Sistema de agendamento universitário protegido por SRP."
+order: 9
+references:
+  - title: "UniLicungo — Engineering Department"
+    url: "https://www.unilicungo.ac.mz"
+---
+
+## Contexto
+
+Um sistema de agendamento universitário gere: salas, docentes, disciplinas, horários, e restrições de disponibilidade. Um agente de IA assiste na optimização de horários.
+
+## O problema sem SRP
+
+O agente, ao optimizar horários, precisa de acesso a dados de disponibilidade de docentes. Sem runtime boundaries:
+
+- O agente acede a dados pessoais dos docentes (scope leakage)
+- O agente modifica restrições de salas que pertencem a outro departamento (cross-scope)
+- O agente reorganiza disciplinas de semestres futuros (architectural drift)
+
+## Como SRP resolve
+
+```yaml
+scopes:
+  scheduling:
+    allowed_targets: ["rooms.available", "timeslots", "courses.current_semester"]
+    denied_targets: ["faculty.personal", "finance.*", "courses.future"]
+```
+
+O agente opera **dentro do scope de scheduling**. Qualquer tentativa de aceder a dados pessoais ou financeiros resulta em `DENIED`.

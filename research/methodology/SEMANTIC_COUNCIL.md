@@ -2,11 +2,11 @@
 
 **Status:** ACTIVE
 
-As the Semantic OS scales from an internal runtime into a public ecosystem standard, the greatest risk is **Epistemological Fragmentation**. 
+As the SRP (formerly SRP) scales from an internal runtime into a public ecosystem standard, the greatest risk is **Epistemological Fragmentation**. 
 
 If external teams fork the protocol and add new `Edge Types` (e.g., creating a `suggests` edge instead of using strict constraints) or bypass the `CapabilityGate` for convenience, the deterministic nature of the graph collapses. 
 
-The Semantic OS becomes just another probabilisitic orchestration tool.
+The SRP becomes just another probabilisitic orchestration tool.
 
 ## The Council Mandate
 To protect the integrity of the Semantic Runtime Protocol (SRP), the Semantic Council holds absolute veto power over the fundamental rules of the system.

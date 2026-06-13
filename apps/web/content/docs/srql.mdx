@@ -1,0 +1,34 @@
+---
+title: "SRQL"
+description: "Semantic Runtime Query Language — linguagem de consulta do runtime."
+order: 8
+references:
+  - title: "SRQL Specification"
+    url: "https://github.com/egaslemos-gif/semantic-runtime-protocol/tree/main/specs/srql/v1alpha"
+---
+
+## O que é SRQL
+
+SRQL (Semantic Runtime Query Language) é a linguagem de consulta do SRP runtime. Permite consultar o grafo arquitectural, testar traversals, e auditar decisões do firewall.
+
+## Sintaxe básica
+
+```
+TRAVERSE FROM server.auth
+  WITH DEPTH 2
+  ALLOW depends_on, owns
+  DENY frontend.*
+```
+
+## Resultado
+
+```json
+{
+  "status": "COMPLETED",
+  "nodes_visited": 3,
+  "violations": 0,
+  "path": ["server.auth", "server.auth.middleware", "server.persistence"]
+}
+```
+
+SRQL é determinística — a mesma query sobre o mesmo grafo produz sempre o mesmo resultado.

@@ -12,10 +12,10 @@ Prompting is probabilistic. If the context window contains conflicting informati
 As context windows scale to millions of tokens, the "surface area" for conflicting information expands exponentially. Prompt engineering attempts to patch this by making the instructions longer, louder, and more repetitive. This is a losing battle against semantic entropy.
 
 ## The Semantic Runtime Solution
-The Semantic OS eliminates prompt engineering by replacing **Persuasion** with **Governance**.
+The SRP (formerly SRP) eliminates prompt engineering by replacing **Persuasion** with **Governance**.
 
-Instead of feeding the LLM raw files and asking it to behave, the Semantic OS intercepts the LLM's request. It compiles a deterministic graph of the codebase, explicitly links `auth.ts` to `db_schema.sql` via an `enforces` edge, and prunes out all irrelevant or stale data before the LLM ever sees it. 
+Instead of feeding the LLM raw files and asking it to behave, the SRP intercepts the LLM's request. It compiles a deterministic graph of the codebase, explicitly links `auth.ts` to `db_schema.sql` via an `enforces` edge, and prunes out all irrelevant or stale data before the LLM ever sees it. 
 
-When the payload reaches the LLM, it is not a folder of text; it is a strict JSON manifest. The LLM does not need to be persuaded to check the database schema, because the Semantic OS has already mathematically bound the schema to the authentication context and delivered it as a `Strict Constraint`.
+When the payload reaches the LLM, it is not a folder of text; it is a strict JSON manifest. The LLM does not need to be persuaded to check the database schema, because the SRP has already mathematically bound the schema to the authentication context and delivered it as a `Strict Constraint`.
 
 Prompt engineering dies when context becomes a governed protocol.

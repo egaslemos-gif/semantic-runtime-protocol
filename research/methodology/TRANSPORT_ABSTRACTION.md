@@ -1,6 +1,6 @@
 # Transport Abstraction
 
-To ensure the Semantic OS can scale beyond Next.js (e.g., local daemons, Rust runtimes, CLI), the protocol is decoupled entirely from HTTP.
+To ensure the SRP (formerly SRP) can scale beyond Next.js (e.g., local daemons, Rust runtimes, CLI), the protocol is decoupled entirely from HTTP.
 
 ## Architectural Layers
 

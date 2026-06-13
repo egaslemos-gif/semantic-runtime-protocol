@@ -1,0 +1,46 @@
+---
+title: "Retrieval"
+description: "Como sistemas de recuperação funcionam e onde param de ser suficientes."
+order: 3
+references:
+  - title: "Lewis et al. — Retrieval-Augmented Generation"
+    url: "https://arxiv.org/abs/2005.11401"
+  - title: "Microsoft — GraphRAG"
+    url: "https://microsoft.github.io/graphrag/"
+relatedSystems:
+  - title: "Pinecone"
+    url: "https://www.pinecone.io"
+  - title: "Chroma"
+    url: "https://www.trychroma.com"
+  - title: "Weaviate"
+    url: "https://weaviate.io"
+---
+
+## O que é retrieval
+
+Retrieval é o processo de **encontrar e entregar informação relevante** ao modelo de linguagem. Em vez do modelo "saber" tudo, o sistema busca informação sob demanda.
+
+As principais abordagens:
+
+- **RAG**: Embeds documentos em vectores, recupera por similaridade
+- **GraphRAG**: Constrói grafo de conhecimento, recupera por relações
+- **Full-text search**: Busca por keywords tradicionais
+- **Hybrid**: Combina múltiplas abordagens
+
+## Onde retrieval é forte
+
+Retrieval resolve o problema de **escala de conhecimento**: um modelo com 100K tokens de contexto pode aceder a milhões de documentos via retrieval selectivo.
+
+## Onde retrieval não resolve
+
+Retrieval optimiza para **relevância semântica**. Não optimiza para **permissão arquitectural**.
+
+O retrieval não distingue:
+- `server/auth/middleware.ts` (contexto que o agente deveria ver)
+- `server/auth/jwt-secrets.ts` (contexto que o agente não deveria ver)
+
+Ambos são igualmente "relevantes" para a query "optimizar autenticação".
+
+## Conexão com runtime safety
+
+SRP não substitui retrieval. Opera **antes** dele — define o subgrafo navegável, e o retrieval opera apenas dentro desse subgrafo. Relevância semântica aplicada sobre um scope seguro.

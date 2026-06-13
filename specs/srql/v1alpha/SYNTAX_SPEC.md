@@ -2,7 +2,7 @@
 
 **Version:** `v1alpha`
 
-The Semantic Runtime Query Language (SRQL) is the formal query language for interacting with the Semantic OS. It replaces fuzzy natural language intent with deterministic Graph Traversal constraints.
+The Semantic Runtime Query Language (SRQL) is the formal query language for interacting with the SRP. It replaces fuzzy natural language intent with deterministic Graph Traversal constraints.
 
 ## 1. Core Grammar (BNF)
 
@@ -27,12 +27,12 @@ The Semantic Runtime Query Language (SRQL) is the formal query language for inte
 
 **Basic Intent Canonicalization:**
 ```sql
-GET governance FOR system.auth.login
+GET governance FOR server.auth.login
 ```
 
 **Bounded Traversal:**
 ```sql
-GET governance FOR system.auth
+GET governance FOR server.auth
 WITH strict constraints
 MAX_DEPTH 2
 BUDGET 50

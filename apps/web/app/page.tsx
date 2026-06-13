@@ -3,8 +3,11 @@
 import React from 'react';
 import Link from 'next/link';
 import FirewallConsole from '../components/FirewallConsole';
+import RuntimeGraph from '../components/runtime/RuntimeGraph';
+import { useTraversalSimulator } from '../lib/runtime/use-traversal';
 
 export default function HomePage() {
+  const simulator = useTraversalSimulator();
   const ctaStyle = {
     display: 'inline-block',
     padding: '0.75rem 1.25rem',
@@ -41,7 +44,12 @@ export default function HomePage() {
         </p>
 
         {/* FIREWALL DEMO */}
-        <FirewallConsole />
+        <FirewallConsole 
+            intent={simulator.intent}
+            renderedEvents={simulator.renderedEvents}
+            status={simulator.status}
+            executeFirewall={simulator.executeFirewall}
+        />
 
         {/* VALUE PROPS */}
         <ul style={{
@@ -89,6 +97,33 @@ export default function HomePage() {
           <div style={{ color: 'var(--blocked)' }}>✓ Agent blocked from traversing server.auth.secrets</div>
         </div>
       </header>
+
+      {/* TOPOLOGY GRAPH SECTION */}
+      <section style={{ marginBottom: '6rem' }}>
+        <h2 style={{
+          fontSize: '0.8rem',
+          fontWeight: 600,
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          color: 'var(--fg-dim)',
+          marginBottom: '1rem',
+        }}>
+          Runtime Topology Enforcement
+        </h2>
+        <p style={{
+          fontSize: '0.95rem',
+          color: 'var(--fg-muted)',
+          marginBottom: '2rem',
+          maxWidth: '600px',
+        }}>
+          Visual representation of architectural instrumentation. As the agent attempts to traverse 
+          inter-scope dependencies, the runtime physically isolates the boundaries.
+        </p>
+        <RuntimeGraph 
+            events={simulator.renderedEvents}
+            status={simulator.status}
+        />
+      </section>
 
       {/* SECTION NAVIGATION */}
       <section style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem' }}>

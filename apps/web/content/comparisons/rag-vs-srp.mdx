@@ -25,17 +25,17 @@ relatedSystems:
 
 São camadas complementares, não competitivas.
 
-## Comparação directa
+## The Layered Ecosystem
 
-| Dimensão | RAG | SRP |
+Para compreender o SRP, é fundamental entender onde ele se posiciona na stack moderna de agentes de inteligência artificial.
+
+| Layer | Role | Failure Without SRP |
 |---|---|---|
-| Objectivo | Recuperar contexto relevante | Governar contexto permitido |
-| Mecanismo | Embeddings + similaridade | Graph traversal + scope rules |
-| Opera em | Conteúdo | Arquitectura |
-| Determinístico | Não (probabilístico) | Sim (grafo explícito) |
-| Previne scope leakage | Não | Sim |
-| Melhora qualidade de resposta | Sim | Indirectamente |
-| Camada | Retrieval | Runtime governance |
+| RAG | Context retrieval | Sensitive retrieval contamination |
+| MCP | Tool communication | Unsafe tool reachability |
+| Harness | Agent execution | Unlimited architectural traversal |
+| Guardrails | Output validation | Late-stage policy enforcement |
+| **SRP** | **Traversal boundary enforcement** | **Prevents illegal context assembly** |
 
 ## Onde RAG é forte
 

@@ -1,44 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { simulateTraversal, TraversalIntent } from '../lib/runtime/traversal-engine';
+import React, { useEffect } from 'react';
+import { TraversalIntent } from '../lib/runtime/traversal-engine';
 import { RuntimeEvent } from '../lib/runtime/types';
 
-// Sleep helper
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+interface FirewallConsoleProps {
+    intent: TraversalIntent;
+    renderedEvents: RuntimeEvent[];
+    status: 'IDLE' | 'RUNNING' | 'BLOCKED' | 'SUCCESS';
+    executeFirewall: (intent: TraversalIntent) => void;
+}
 
-export default function FirewallConsole() {
-    const [intent, setIntent] = useState<TraversalIntent>('refactor_session');
-    const [renderedEvents, setRenderedEvents] = useState<RuntimeEvent[]>([]);
-    const [status, setStatus] = useState<'IDLE' | 'RUNNING' | 'BLOCKED' | 'SUCCESS'>('IDLE');
-
-    const executeFirewall = async (targetIntent: TraversalIntent) => {
-        setIntent(targetIntent);
-        setRenderedEvents([]);
-        setStatus('RUNNING');
-
-        // 1. Generate full deterministic event sequence from engine
-        const eventSequence = simulateTraversal(targetIntent);
-
-        // 2. Play them back visually
-        for (const event of eventSequence) {
-            await sleep(350);
-            setRenderedEvents(prev => [...prev, event]);
-            
-            if (event.type === 'BOUNDARY_VIOLATION') {
-                setStatus('BLOCKED');
-            }
-        }
-
-        const lastEvent = eventSequence[eventSequence.length - 1];
-        if (lastEvent.type === "TERMINATED" && lastEvent.reason === "Traversal completed successfully.") {
-             setStatus('SUCCESS');
-        }
-    };
-
+export default function FirewallConsole({ intent, renderedEvents, status, executeFirewall }: FirewallConsoleProps) {
     // Auto-run on mount
     useEffect(() => {
         executeFirewall('refactor_session');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const formatEventText = (e: RuntimeEvent): string => {

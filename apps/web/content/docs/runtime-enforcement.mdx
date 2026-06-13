@@ -1,0 +1,25 @@
+---
+title: "Runtime Enforcement"
+description: "How SRP structurally filters traversal paths before context assembly."
+order: 3
+---
+
+## The Concept of Deterministic Interception
+
+SRP does not wait for an AI model to generate an unsafe output, nor does it rely on prompt engineering to discourage unsafe actions. SRP operates at the architectural topology level: it intercepts and physically drops the traversal edges that bridge isolated scopes.
+
+If a node exists outside the allowed scope boundary, the agent cannot see it, cannot traverse to it, and cannot assemble it into context.
+
+## Traversal Filtering Mechanism
+
+The core engine of SRP is the traversal filter. When a harness or orchestration framework instructs an agent to execute a tool or fetch a node, the request is intercepted by the Semantic Runtime Protocol.
+
+1. **Intent Resolution**: The agent's intent is mapped to a canonical starting node (e.g., `frontend.middleware`).
+2. **Edge Validation**: As the agent attempts to step to the next node (e.g., `server.auth`), SRP evaluates the edge.
+3. **Scope Enforcement**: If the origin scope differs from the target scope, and no explicit inter-scope policy permits the traversal, the edge is dropped.
+
+## Context Assembly Blockade
+
+Because the edge is dropped, the target node is never retrieved. This prevents **illegal context assembly**. 
+
+By guaranteeing that the LLM is never exposed to out-of-scope context, you eliminate the possibility of scope leakage or hallucinated drift. The architecture becomes mathematically enforceable, replacing probabilistic LLM behavior with deterministic infrastructure rules.

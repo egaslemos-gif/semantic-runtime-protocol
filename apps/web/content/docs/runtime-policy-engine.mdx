@@ -1,0 +1,29 @@
+---
+title: "Runtime Policy Engine"
+description: "How edge validation and rejection chains operate within the SRP architecture."
+order: 4
+---
+
+## Edge Validation Pipeline
+
+The SRP Runtime Policy Engine evaluates every traversal attempt between graph nodes. When an agent requests traversal from `Node A` to `Node B`, the engine executes a deterministic validation pipeline.
+
+1. **Topology Lookup**: The engine retrieves the declared scopes for both `Node A` and `Node B`.
+2. **Policy Evaluation**: The engine checks the global and node-specific policies to determine if a traversal edge is permitted between `Scope A` and `Scope B`.
+3. **Rejection or Progression**: If permitted, the node is loaded into the agent's context window. If denied, a Rejection Chain is triggered.
+
+## The Rejection Chain
+
+When the Policy Engine drops a traversal edge, it emits a structural termination signal to the orchestrating harness. 
+
+This is not a polite natural language suggestion like *"Please do not look at that file."* It is a hard architectural block returning a zero-edge result.
+
+```txt
+> Runtime Policy: tenant_isolation_strict
+> Evaluation: DENIED
+> Action: Traversal terminated at boundary edge.
+```
+
+## Zero-Trust Default
+
+The SRP Policy Engine operates on a zero-trust model for agentic traversal. All inter-scope edges are considered `BLOCKED` unless an explicit routing policy declares them safe. This flips the standard AI agent paradigm from "allow all and guardrail later" to "deny all and allow explicitly."

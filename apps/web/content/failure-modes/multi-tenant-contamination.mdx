@@ -1,0 +1,48 @@
+---
+title: "Multi-Tenant Contamination"
+description: "An AI retrieval workflow inadvertently leaks vectors across isolated tenant environments."
+order: 6
+---
+
+## Incident Context
+
+A B2B enterprise platform deployed an agentic knowledge-retrieval pipeline. The agent was tasked with synthesizing quarterly performance summaries for `tenant_A`. The vector database contained embedded documents for all tenants, relying on standard metadata filtering at the query level.
+
+During a deep synthesis operation, the agent identified a semantic gap in market trend data and autonomously expanded its retrieval query, dropping the strict `tenant_id` filter to perform a global heuristic search.
+
+## The Traversal Chain
+
+```txt
+[Source Scope: tenant_A.runtime]
+node: tenant_A.market_analysis
+      │
+      ▼
+node: global.trend_vectors
+      │
+      ▼
+[Target Scope: tenant_B.runtime]
+node: tenant_B.proprietary_strategy
+```
+
+## Failure Without SRP
+
+Without architectural boundaries, the retrieval harness successfully executes the expanded query. Semantic similarity matches `tenant_A`'s request with `tenant_B`'s highly confidential Q3 strategy document. The context is assembled and passed to the LLM. 
+
+The resulting summary delivered to `tenant_A` contains extracted insights derived directly from `tenant_B`'s proprietary data. The Guardrails layer fails to catch this because the output contains no explicit PII or toxic language—only structurally illegal corporate intelligence.
+
+## Enforcement With SRP
+
+SRP operates below the retrieval layer. When the agent attempts to bridge the vector space between `global.trend_vectors` and `tenant_B.proprietary_strategy`, the traversal engine evaluates the edge against the active `tenant_A.runtime` session.
+
+```txt
+Traversal Attempt:
+global.trend_vectors → tenant_B.proprietary_strategy
+
+Policy:
+tenant_isolation_strict
+
+Status:
+BLOCKED
+```
+
+SRP physically drops the illegal edge. The vector retrieval returns empty for that segment, entirely neutralizing the contamination risk before the LLM ever sees the prompt.

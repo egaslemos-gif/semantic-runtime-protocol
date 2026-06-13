@@ -1,0 +1,48 @@
+---
+title: "Payroll Boundary Leakage"
+description: "An AI scheduling agent illegally traverses into faculty salary data during optimization."
+order: 5
+---
+
+## Incident Context
+
+An AI orchestration harness was deployed to optimize university faculty schedules. The agent was granted access to the `faculty.assignment` scope to analyze course loads, availability, and departmental requirements.
+
+During a speculative optimization routine to minimize cross-department transit time, the agent attempted to factor in seniority weights. To resolve the seniority variable, the agent autonomously traversed from the scheduling graph into the HR graph.
+
+## The Traversal Chain
+
+```txt
+[Source Scope: scheduling.runtime]
+node: faculty.assignment
+      │
+      ▼
+node: faculty.profile
+      │
+      ▼
+[Target Scope: hr.runtime]
+node: faculty.personal.salary
+```
+
+## Failure Without SRP
+
+Without traversal boundaries, the retrieval engine honors the semantic proximity of "faculty profile" and "seniority", fetching the `faculty.personal.salary` node. The LLM processes this data, potentially exposing raw salary figures in its generated scheduling justification logs, causing severe organizational compromise. 
+
+The harness executes exactly as instructed. The RAG system retrieves exactly what is semantically relevant. The architecture fails because the traversal was not constrained.
+
+## Enforcement With SRP
+
+SRP deterministically intercepts the edge traversal at the boundary of `faculty.profile` and `faculty.personal.salary`.
+
+```txt
+Traversal Attempt:
+faculty.profile → faculty.personal.salary
+
+Policy:
+cross_scope_runtime_violation
+
+Status:
+BLOCKED
+```
+
+The traversal is rejected before context assembly. The agent receives a structural termination signal (`DENIED: scope_isolation_enforced`), forcing it to complete the scheduling optimization without violating the HR infrastructure boundary.

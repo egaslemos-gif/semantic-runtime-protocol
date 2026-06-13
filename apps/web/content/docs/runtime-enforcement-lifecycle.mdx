@@ -1,0 +1,46 @@
+---
+title: "Runtime Enforcement Lifecycle"
+description: "The mechanical sequence of traversal interception, context filtering, and assembly rejection."
+order: 5
+---
+
+## The Lifecycle Objective
+
+The Semantic Runtime Protocol executes a strict, deterministic sequence during every node traversal. The objective of this lifecycle is to isolate architectural state and explicitly drop unauthorized edges **before** context assembly occurs.
+
+SRP does not generate text, orchestrate tasks, or validate LLM outputs. It enforces structural topology.
+
+## 1. Traversal Interception
+
+When an agentic harness attempts to fetch data or execute an internal tool, the traversal is intercepted at the middleware layer. 
+
+The harness is paused. The traversal intent is passed to the SRP engine.
+
+```txt
+Intent: "Fetch records from server.auth.secrets"
+```
+
+## 2. Edge Validation
+
+The SRP engine evaluates the requested edge against the static architectural topology. 
+It identifies:
+- The **Source Scope** (the execution context of the agent, e.g., `frontend.middleware`).
+- The **Target Scope** (the requested node, e.g., `server.auth.secrets`).
+
+SRP operates on a default-deny paradigm. If the edge crosses a scope boundary and no explicit allowance policy exists, the edge is deemed illegal.
+
+## 3. Context Filtering
+
+If the edge is valid, the node data is fetched and passed to the context assembly pipeline.
+If the edge is invalid, the edge is structurally dropped. 
+
+The engine does not pass a "warning" string to the LLM. It intercepts the data layer and returns an empty structural result (or a hard system error) to the harness. 
+
+## 4. Assembly Rejection & Policy Enforcement Chains
+
+When a traversal is blocked, the engine logs the `BOUNDARY_VIOLATION` and resolves the execution based on the enforcement mode:
+
+1. **BLOCKED**: The specific tool call or fetch request returns null. The agent must proceed without the out-of-bounds context.
+2. **TERMINATED**: The agent's entire execution loop is aborted.
+
+By intercepting at the traversal layer, SRP guarantees that the LLM is never exposed to architecturally dangerous context. This is the essence of deterministic runtime safety.

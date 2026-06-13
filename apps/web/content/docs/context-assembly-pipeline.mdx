@@ -1,0 +1,36 @@
+---
+title: "Context Assembly Pipeline"
+description: "The mechanics of context construction post-validation."
+order: 7
+---
+
+## The Danger of Unrestricted Context
+
+In standard agentic frameworks, the context assembly pipeline is fundamentally reactive. The agent requests data, the system fetches it, and the data is directly concatenated into the prompt. 
+
+If the agent decides to query internal administration APIs or cross-tenant databases, the system dutifully complies. The resulting context window becomes an aggregation of illegal or dangerous organizational state.
+
+## The Deterministic Pipeline
+
+SRP re-engineers this pipeline by inserting a deterministic policy evaluation step. **SRP constrains traversal BEFORE context assembly.**
+
+The pipeline mechanics operate as follows:
+
+### 1. The Traversal Request
+The agent emits a structural request to fetch data from `Target Node Y`.
+
+### 2. Topological Policy Evaluation
+Before the fetch is executed, the SRP middleware intercepts the request. The engine evaluates the predefined `.srp` or `srp.config.ts` topological rules.
+
+### 3. The Assembly Fork
+- **Condition A (Valid Edge):** The target node is permitted. The system executes the fetch, retrieves the data, and successfully concatenates it into the context payload.
+- **Condition B (Invalid Edge):** The target node crosses an isolated scope boundary. SRP emits a `BLOCKED` state. The fetch is structurally prevented. The context assembly receives a `null` or explicit failure signal, preventing the LLM from ever ingesting the targeted state.
+
+## Execution Isolation
+
+By filtering the pipeline prior to data fetching, SRP ensures zero infrastructural exposure. 
+- The LLM cannot summarize what it cannot see.
+- The LLM cannot hallucinate actions on systems it cannot reach.
+- The LLM cannot leak secrets it was never permitted to assemble.
+
+This pipeline isolates the non-deterministic nature of the LLM behind a highly deterministic, infrastructure-grade firewall.

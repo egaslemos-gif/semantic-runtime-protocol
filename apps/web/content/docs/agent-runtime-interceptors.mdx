@@ -1,0 +1,43 @@
+---
+title: "Agent Runtime Interceptors"
+description: "How SRP hooks into the agent execution loop via middleware interception."
+order: 6
+---
+
+## Middleware Interception
+
+SRP is not a framework, an SDK, or a React library. It is an infrastructure primitive. To enforce boundary constraints, SRP utilizes **Middleware Interceptors** that sit directly within the agent's execution loop.
+
+The core principle remains absolute: **SRP constrains traversal BEFORE context assembly.**
+
+## Pseudo-Runtime Integration
+
+Instead of abstracting the agent behind a framework-specific SDK, SRP integrates as a strict runtime interceptor. When an agent attempts a semantic traversal (such as invoking a tool or querying a graph edge), the interception layer pauses execution, validates the topological constraint, and then either resumes or structurally blocks the attempt.
+
+```typescript
+import { createRuntimeFirewall } from '@semantic-runtime/protocol';
+import { srpConfig } from '../srp.config';
+
+// 1. Instantiate the runtime firewall with the static configuration
+const runtimeFirewall = createRuntimeFirewall(srpConfig);
+
+// 2. Define the interception hook within the agent harness
+function beforeContextAssembly(traversalIntent) {
+  // The firewall evaluates the semantic traversal against the static scopes
+  const enforcement = runtimeFirewall.validate(traversalIntent);
+  
+  if (enforcement.status === 'BLOCKED') {
+    // Edge is structurally severed. Context will not be assembled.
+    throw new TraversalBoundaryViolation(enforcement.reason);
+  }
+  
+  // Edge is valid. Proceed to fetch data and assemble context.
+  return enforcement.targetNode;
+}
+```
+
+## Architectural Decoupling
+
+Notice that the agent itself remains entirely unaware of the SRP boundary. The agent orchestrator executes its standard loop (`Think -> Act -> Observe`), but the `Act` phase is mechanistically restricted by the `beforeContextAssembly` interceptor.
+
+This decoupling guarantees that enforcement cannot be bypassed by prompt injection, jailbreaking, or algorithmic drift. The constraint is enforced at the network/execution boundary, not within the LLM's cognition layer.
